@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Raktar.Controllers;
+using Raktar.Entity;
 
 var builder = WebApplication.CreateBuilder(args);
 

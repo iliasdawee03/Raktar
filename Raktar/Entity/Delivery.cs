@@ -1,4 +1,4 @@
-﻿namespace Raktar.Controllers
+﻿namespace Raktar.Entity
 {
     public enum DeliveryStatus
     {

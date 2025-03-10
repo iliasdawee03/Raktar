@@ -2,7 +2,7 @@
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
 
-namespace Raktar.Controllers
+namespace Raktar.Entity
 {
     public class RaktarDbContext : DbContext
     {
