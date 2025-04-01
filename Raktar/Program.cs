@@ -13,7 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<RaktarDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConn")));
 
-
+// TESZT
 
 //majd az automappert hozzáadni
 //builder.Services.AddAutoMapper(typeof(alétrehozott mapper.cs neve ofc));
