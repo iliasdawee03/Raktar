@@ -18,8 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Services\" />
+    <None Include="services\Raktar.Services.csproj" />
   </ItemGroup>
 
 </Project>
