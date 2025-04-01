@@ -5,5 +5,6 @@
         public int WarehouseWorkerId { get; set; }
         public string Name { get; set; }
         public List<Product> AssignedProducts { get; set; }
+        public User user { get; set; }
     }
 }
