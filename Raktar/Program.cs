@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 //builder.Services.AddScoped<IUserService, UserService>();
 //builder.Services.AddScoped<IOrderService, OrderService>();
 
-
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConn")));
 
