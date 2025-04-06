@@ -9,11 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi();
+//builder.Services.AddScoped<IUserService, UserService>();
+//builder.Services.AddScoped<IOrderService, OrderService>();
 
-builder.Services.AddDbContext<RaktarDbContext>(options =>
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConn")));
 
-
+// TESZT
 
 //majd az automappert hozzáadni
 //builder.Services.AddAutoMapper(typeof(alétrehozott mapper.cs neve ofc));

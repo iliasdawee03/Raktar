@@ -1,38 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using static Raktar.Dtos.OrderItemDto;
 
 namespace Raktar.Dtos
 {
-    public class OrderDTO
+    public class OrderDto
     {
-        public int Id { get; set; }
-        public int CustomerId { get; set; }
-        public List<OrderItemDto> Items { get; set; } = new();
-        public DateTime OrderDate { get; set; }
-        public string Status { get; set; }
-    }
+        public class OrderReadDto
+        {
+            public int Id { get; set; }
+            public int CustomerId { get; set; }
+            public DateTime PlacedAt { get; set; }
+            public DateTime? ClosedAt { get; set; }
+            public string Status { get; set; }
+            public List<OrderItemReadDto> Items { get; set; }
+        }
 
-    public class OrderItemDto
-    {
-        public int ProductId { get; set; }
-        public string ProductName { get; set; } = string.Empty;
-        public int Quantity { get; set; }
-    }
-
-    public class OrderItemCreateDto
-    {
-        [Required]
-        public int ProductId { get; set; }
-
-        [Required]
-        [Range(1,int.MaxValue)]
-        public int Quantity { get; set; }
-    }
-    
-    public class OrderCreateDto
-    {
-        [Required]
-        public int CustomerId { get; set; }
-        [Required]
-        public List<OrderItemCreateDto> Items { get; set; } = new();
+        public class OrderCreateDto
+        {
+            public int CustomerId { get; set; }
+            public List<OrderItemCreateDto> Items { get; set; }
+        }
     }
 }
