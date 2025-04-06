@@ -18,7 +18,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="services\Raktar.Services.csproj" />
+    <None Include="Services\Raktar.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Dtos\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>
