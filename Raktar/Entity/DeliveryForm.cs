@@ -6,7 +6,8 @@
         public int SupplierId { get; set; }
         public User Supplier { get; set; }
         public DateTime ExpectedDeliveryDate { get; set; }
-        public string Status { get; set; } // e.g. "Filled", "Processed"
+        public DateTime CreatedAt { get; set; }
+        public string Status { get; set; } //Filled, Processed
         public List<DeliveredProduct> DeliveredProducts { get; set; }
     }
 }
