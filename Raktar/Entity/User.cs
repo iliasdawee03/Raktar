@@ -5,7 +5,8 @@
         Customer,
         Supplier,
         Carrier,
-        WarehouseStaff
+        WarehouseStaff,
+        Admin
     }
     public class User
     {
