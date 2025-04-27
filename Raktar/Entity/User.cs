@@ -15,6 +15,7 @@
         public string Email { get; set; }
         public string Phone { get; set; }
         public string PasswordHash { get; set; }
-        public UserRole Role { get; set; }
+        public List<UserRole> Role { get; set; }
+
     }
 }

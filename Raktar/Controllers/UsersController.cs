@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Raktar.Services;
+using System.Security.Claims;
 using static Raktar.Dtos.UserDto;
 
 namespace Raktar.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -30,11 +33,12 @@ namespace Raktar.Controllers
             return user == null ? NotFound() : Ok(user);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<UserReadDto>> Create(UserCreateDto dto)
+        [HttpPost("register")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Create([FromBody] UserCreateDto dto)
         {
             var createdUser = await _userService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = createdUser.Id }, createdUser);
+            return Ok(createdUser);
         }
 
         [HttpPut("{id}")]
@@ -49,6 +53,13 @@ namespace Raktar.Controllers
         {
             var result = await _userService.DeleteAsync(id);
             return result ? NoContent() : NotFound();
+        }
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] UserLoginDTO userDto)
+        {
+            var token = await _userService.LoginAsync(userDto);
+            return Ok(new { Token = token });
         }
     }
 }

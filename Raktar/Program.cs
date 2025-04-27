@@ -19,7 +19,7 @@ builder.Services.AddScoped<ITransportService, TransportService>();
 builder.Services.AddScoped<IDeliveryFormService, DeliveryFormService>();
 builder.Services.AddScoped<IWarehouseService, WarehouseService>();
 
-JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 builder.Services
     .AddAuthentication(options =>
     {

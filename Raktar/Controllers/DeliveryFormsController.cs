@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Raktar.Services;
 using static Raktar.Dtos.DeliveryFormDto;
 
@@ -6,6 +8,8 @@ namespace Raktar.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Roles = "Supplier")]
     public class DeliveryFormsController : ControllerBase
     {
         private readonly IDeliveryFormService _deliveryFormService;

@@ -2,11 +2,15 @@
 using Raktar.Services;
 using Raktar.Dtos;
 using static Raktar.Dtos.ComplaintDto;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Raktar.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Roles = "Customer")]
     public class ComplaintsController : ControllerBase
     {
         private readonly IComplaintService _complaintService;
