@@ -102,12 +102,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 app.UseCors(options => {
     options.AllowAnyOrigin();
-    options.AllowAnyOrigin();
     options.AllowAnyHeader();
+    options.AllowAnyMethod();
 });
 
 app.MapControllers();

@@ -17,8 +17,21 @@ namespace Raktar.Services
         public AutoMapperProfile()
         {
             // User
-            CreateMap<User, UserReadDto>();
-            CreateMap<UserCreateDto, User>();
+            CreateMap<UserCreateDto, User>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Username))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
+            CreateMap<User, UserCreateDto>()
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(dest => dest.Password, opt => opt.Ignore());
+            CreateMap<User, UserReadDto>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone));
+            CreateMap<UserUpdateDto, User>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Username))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.Role, opt => opt.Ignore());
 
             // Product
             CreateMap<Product, ProductReadDto>();

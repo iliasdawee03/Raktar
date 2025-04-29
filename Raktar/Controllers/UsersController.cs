@@ -38,6 +38,10 @@ namespace Raktar.Controllers
         public async Task<IActionResult> Create([FromBody] UserCreateDto dto)
         {
             var createdUser = await _userService.CreateAsync(dto);
+            if(createdUser is null)
+            {
+                return BadRequest("A megadott email már létezik");
+            }
             return Ok(createdUser);
         }
 
@@ -56,10 +60,17 @@ namespace Raktar.Controllers
         }
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] UserLoginDTO userDto)
+        public async Task<IActionResult> Login([FromBody] UserLoginDto userDto)
         {
-            var token = await _userService.LoginAsync(userDto);
-            return Ok(new { Token = token });
+            try
+            {
+                var token = await _userService.LoginAsync(userDto);
+                return Ok(new { Token = token });
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized("Invalid credentials.");
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Raktar.Dtos
             public int Id { get; set; }
             public string Name { get; set; }
             public string Email { get; set; }
-            public string Phone { get; set; }
+            public int Phone { get; set; }
             public UserRole Role { get; set; }
         }
 
@@ -28,12 +28,12 @@ namespace Raktar.Dtos
             [MinLength(6)]
             public string Password { get; set; }
 
-            [Phone]
-            public string PhoneNumber { get; set; }
+            public int PhoneNumber { get; set; }
+            [Required]
             public UserRole Role { get; set; }
         }
 
-        public class UserLoginDTO
+        public class UserLoginDto
         {
             [Required]
             [EmailAddress]
@@ -42,7 +42,7 @@ namespace Raktar.Dtos
             [Required]
             public string Password { get; set; }
         }
-        public class UserUpdateDTO
+        public class UserUpdateDto
         {
             [Required]
             [StringLength(50)]
@@ -53,9 +53,9 @@ namespace Raktar.Dtos
             public string Email { get; set; }
 
             [Phone]
-            public string PhoneNumber { get; set; }
+            public int PhoneNumber { get; set; }
 
-            public IList<int> RoleIds { get; set; }
+            public string Password { get; set; }
         }
     }
 }
