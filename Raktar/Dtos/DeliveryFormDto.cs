@@ -9,6 +9,7 @@ namespace Raktar.Dtos
             public int Id { get; set; }
             public int SupplierId { get; set; }
             public DateTime ExpectedDeliveryDate { get; set; }
+            public DateTime CreatedAt { get; set; }
             public string Status { get; set; }
             public List<DeliveredProductReadDto> DeliveredProducts { get; set; }
         }
