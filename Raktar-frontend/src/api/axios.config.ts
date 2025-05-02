@@ -1,18 +1,23 @@
 import axios from 'axios';
 import { tokenKeyName } from '../constants/const.ts';
 
-const baseURL = '${import.meta.env.VITE_REST_API_URL}';
-
 const axiosInstance = axios.create({
-    baseURL
+    baseURL: "https://localhost:7035", 
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    },
 });
 
-axiosInstance.interceptors.request.use((config) => {
-    config.headers['Authorization'] = `Bearer ${localStorage.getItem(tokenKeyName)}`;
-    return config;
-},
-(error) => { Promise.reject(error) } );
-
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem(tokenKeyName);
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => Promise.reject(error) 
+);
 
 export default axiosInstance;
-
