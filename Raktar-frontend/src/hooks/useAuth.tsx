@@ -8,7 +8,7 @@ const useAuth = () => {
     const { token, setToken, email, setEmail, role, setRole  } = useContext(AuthContext);
     const isLoggedIn = !!token;
 
-    const login = (email: string, password: string) => {
+    const login = async (email: string, password: string) => {
         api.Auth.login(email, password).then((res) => {
             setToken(res.data.token);
             localStorage.setItem(tokenKeyName, res.data.token);
