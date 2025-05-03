@@ -6,9 +6,9 @@ export interface IUserRead {
     role: UserRole;
 }
 export enum UserRole {
-    Customer = 1,
-    Supplier = 2,
-    Carrier = 3,
-    WarehouseStaff = 4,
-    Admin = 5
+    Customer = 0,
+    Supplier = 1,
+    Carrier = 2,
+    WarehouseStaff = 3,
+    Admin = 4
 }
