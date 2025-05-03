@@ -33,8 +33,13 @@ const Login = () => {
             await login(form.values.email, form.values.password);
             console.log("Bejelentkezés sikeres");
             navigate('/dashboard'); 
-        } catch (error) {
-            console.error("Bejelentkezési hiba:", error);
+        } catch (error: unknown) {
+            if (error instanceof Error && (error as { response?: { status: number } }).response?.status === 401) {
+                form.setFieldError('email', 'Érvénytelen bejelentkezési adatok.');
+                form.setFieldError('password', 'Érvénytelen bejelentkezési adatok.');
+            } else {
+                console.error("Bejelentkezési hiba:", error);
+            }
         }
     };
 
