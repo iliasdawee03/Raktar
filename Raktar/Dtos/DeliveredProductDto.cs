@@ -1,4 +1,6 @@
-﻿namespace Raktar.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Raktar.Dtos
 {
     public class DeliveredProductDto
     {
@@ -11,6 +13,7 @@
 
         public class DeliveredProductCreateDto
         {
+            [Required]
             public int ProductId { get; set; }
             public int Quantity { get; set; }
         }
