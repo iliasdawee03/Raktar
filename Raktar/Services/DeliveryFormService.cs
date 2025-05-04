@@ -47,7 +47,6 @@ namespace Raktar.Services
         public async Task<DeliveryFormReadDto> CreateAsync(DeliveryFormCreateDto dto)
         {
             var form = _mapper.Map<DeliveryForm>(dto);
-            form.CreatedAt = DateTime.UtcNow;
 
             await _context.DeliveryForms.AddAsync(form);
             await _context.SaveChangesAsync();
