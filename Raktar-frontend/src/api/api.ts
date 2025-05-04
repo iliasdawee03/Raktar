@@ -10,6 +10,8 @@ import { ITransportCreate } from "../interfaces/transport/ITransportCreate";
 import { IOrderRead } from "../interfaces/order/IOrderRead";
 import { IOrderCreate } from "../interfaces/order/IOrderCreate";
 import { IDeliveryFormRead } from "../interfaces/deliveryforms/IDeliveryFormRead";
+import { IProductRead } from "../interfaces/product/IProductRead";
+import { IProductCreate } from "../interfaces/product/IProductCreate";
 
 
 //Complain API
@@ -35,6 +37,14 @@ const DeliveryForm = {
     create : (deliveryForm: IDeliveryFormCreate) => axiosInstance.post<IDeliveryFormCreate>('/api/DeliveryForms', deliveryForm),
 };
 
+//Products API
+const Products = {
+    getAll : () => axiosInstance.get<IProductRead>('/api/Products'),
+    getById : (id: number) => axiosInstance.get<IProductRead>(`/api/Products/${id}`),
+    create : (product: IProductCreate) => axiosInstance.post<IProductCreate>('/api/Products', product),
+    delete : (id: number) => axiosInstance.delete<boolean>(`/api/Products/${id}`),
+    update : (id: number, product: IProductCreate) => axiosInstance.put<IProductCreate>(`/api/Products/${id}`, product),
+};
 
 //User API
 const User = {
@@ -80,5 +90,6 @@ const api = {
     Warehouse,
     Orders,
     Transport,
+    Products,
 }
 export default api;
