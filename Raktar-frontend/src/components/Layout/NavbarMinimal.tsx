@@ -3,7 +3,8 @@ import {rem, Button, useMantineTheme} from "@mantine/core";
 import {
     IconUserCircle,
     IconLogout,
-    IconHome
+    IconHome,
+    IconAlertOctagon,
 } from "@tabler/icons-react";
 import classes from "./NavbarMinimalColored.module.css";
 import {useNavigate} from "react-router-dom";
@@ -52,6 +53,15 @@ export function NavbarMinimal({toggle}: { toggle: () => void }) {
             url: "dashboard",
             roles: ['Customer', 'Supplier', 'Carrier', 'WarehouseStaff', 'Admin'],
         },
+        {
+          icon: IconAlertOctagon,
+          label: "Visszajelzés",
+          url: "complaint",
+          roles: ['Customer', 'Supplier', 'Carrier', 'WarehouseStaff', 'Admin'],  
+        }, 
+/*         {
+            icon: 
+        }, */
     ], []);
 
 

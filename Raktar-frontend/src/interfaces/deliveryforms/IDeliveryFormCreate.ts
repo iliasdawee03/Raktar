@@ -1,9 +1,7 @@
+import { IDeliveredProductCreate } from "../deliveredproducts/IDeliveryProductCreate";
+
 export interface IDeliveryFormCreate {
     supplierId: number;
     expectedDeliveryDate: Date;
-    deliveredProducts: {
-        productId: number;
-        productName: string;  
-        quantity: number;
-    }[];
+    deliveredProducts: IDeliveredProductCreate[]; // Array of delivered products
 }
