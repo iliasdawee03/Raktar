@@ -111,7 +111,7 @@ export function NavbarMinimal({toggle}: { toggle: () => void }) {
                         icon={IconUserCircle}
                         label="Profil"
                         onClick={() => {
-                            navigate("profile");
+                            navigate("/profile");
                             toggle();
                         }} color="grape" />
                     <NavbarLink
