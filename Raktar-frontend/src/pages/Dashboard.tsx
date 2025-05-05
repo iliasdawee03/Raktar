@@ -4,7 +4,7 @@ import { Container } from "@mantine/core";
 
 const Dashboard = () => {
     const toggleNavbar = () => {
-        // Logic for toggling the navbar can be implemented here if needed
+        // Navbar minimalizálása vagy megjelenítése
     };
 
     useEffect(() => {
@@ -12,7 +12,6 @@ const Dashboard = () => {
     }, []);
 
     const loadItems = () => {
-        // Adatok betöltése
     };
 
     return (
