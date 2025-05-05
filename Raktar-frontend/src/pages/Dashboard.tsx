@@ -16,13 +16,8 @@ const Dashboard = () => {
 
     return (
         <div style={{ display: "flex" }}>
-            {/* Navbar */}
             <NavbarMinimal toggle={toggleNavbar} />
-
-            {/* Main content */}
             <Container style={{ flex: 1, padding: "1rem" }}>
-                <h1>Dashboard Page</h1>
-                {/* Ide jöhet a dashboard tartalma */}
             </Container>
         </div>
     );

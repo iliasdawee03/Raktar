@@ -5,6 +5,8 @@ import {
     IconLogout,
     IconHome,
     IconAlertOctagon,
+    IconArmchair2,
+    IconBasketCheck,
 } from "@tabler/icons-react";
 import classes from "./NavbarMinimalColored.module.css";
 import {useNavigate} from "react-router-dom";
@@ -59,9 +61,18 @@ export function NavbarMinimal({toggle}: { toggle: () => void }) {
           url: "complaint",
           roles: ['Customer', 'Supplier', 'Carrier', 'WarehouseStaff', 'Admin'],  
         }, 
-/*         {
-            icon: 
-        }, */
+        {
+            icon: IconArmchair2,
+            label : "Termékek",
+            url: "products",
+            roles : ['Customer', 'Admin'],
+        },
+        {
+            icon : IconBasketCheck,
+            label : "Rendelések",
+            url : "orders",
+            roles : ['Customer', 'Admin'],
+        },
     ], []);
 
 
