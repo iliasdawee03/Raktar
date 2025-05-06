@@ -1,6 +1,8 @@
 import Login from "../pages/Login.tsx";
 import Dashboard from "../pages/Dashboard.tsx";
 import ForgotPassword from "../pages/Forgot.tsx";
+import Complaint from "../pages/Complaint.tsx";
+import Product from "../pages/Product.tsx";
 
 export const routes = [
     {
@@ -14,6 +16,20 @@ export const routes = [
         component: <Dashboard/>,
         isPrivate: true,
         title: "Kezdőlap",
+        children: [
+            {
+                path : "complaint",
+                component : <Complaint/>,
+                isPrivate : true,
+                title : "Visszajelzés",
+            },
+            {
+                path : "product",
+                component : <Product/>,
+                isPrivate : true,
+                title : "Termékek",
+            },
+        ],
     },
     {
         path : "/forgot",

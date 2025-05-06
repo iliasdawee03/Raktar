@@ -6,7 +6,6 @@ import {
     IconHome,
     IconAlertOctagon,
     IconArmchair2,
-    IconBasketCheck,
 } from "@tabler/icons-react";
 import classes from "./NavbarMinimalColored.module.css";
 import {useNavigate} from "react-router-dom";
@@ -52,25 +51,19 @@ export function NavbarMinimal({toggle}: { toggle: () => void }) {
         {
             icon: IconHome,
             label: "Kezdőlap",
-            url: "dashboard",
+            url: "/dashboard",
             roles: ['Customer', 'Supplier', 'Carrier', 'WarehouseStaff', 'Admin'],
         },
         {
-          icon: IconAlertOctagon,
-          label: "Visszajelzés",
-          url: "complaint",
-          roles: ['Customer', 'Supplier', 'Carrier', 'WarehouseStaff', 'Admin'],  
+            icon: IconAlertOctagon,
+            label: "Visszajelzés",
+            url: "/dashboard/complaint",
+            roles: ['Customer', 'Supplier', 'Carrier', 'WarehouseStaff', 'Admin'],
         }, 
         {
             icon: IconArmchair2,
             label : "Termékek",
-            url: "products",
-            roles : ['Customer', 'Admin'],
-        },
-        {
-            icon : IconBasketCheck,
-            label : "Rendelések",
-            url : "orders",
+            url: "/dashboard/product", // ❗️NEM "products"
             roles : ['Customer', 'Admin'],
         },
     ], []);

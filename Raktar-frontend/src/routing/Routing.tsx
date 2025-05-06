@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import useAuth from "../hooks/useAuth.tsx";
 import { routes } from "./Routes.tsx";
 import { ReactElement } from "react";
-import Dashboard from "../pages/Dashboard.tsx";
 
 
 const PrivateRoute = ({ element }: { element: ReactElement }) => {
@@ -11,30 +10,51 @@ const PrivateRoute = ({ element }: { element: ReactElement }) => {
   return isLoggedIn ? element : <Navigate to="/login" />;
 };
 
+interface RouteType {
+  path: string;
+  component: ReactElement;
+  isPrivate?: boolean;
+  children?: RouteType[];
+}
+
+const renderRoutes = (routes: RouteType[]) => {
+  return routes.map((route) => {
+    if (route.children) {
+      // Ha vannak nested route-ok
+      return (
+        <Route
+          key={route.path}
+          path={route.path}
+          element={route.isPrivate ? <PrivateRoute element={route.component} /> : route.component}
+        >
+          {renderRoutes(route.children)} {/* Rekurzív feldolgozás */}
+        </Route>
+      );
+    }
+
+    return (
+      <Route
+        key={route.path}
+        path={route.path}
+        element={route.isPrivate ? <PrivateRoute element={route.component} /> : route.component}
+      />
+    );
+  });
+};
+
+
 const Routing = () => {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn , isLoading} = useAuth();
+
+  if (isLoading) { return null; }
 
   return (
     <Routes>
-      {routes.map((route) =>
-        route.isPrivate ? (
-          <Route
-            key={route.path}
-            path={route.path}
-            element={<PrivateRoute element={route.component} />}
-          />
-        ) : (
-          <Route key={route.path} path={route.path} element={route.component} />
-        )
-      )}
+      {renderRoutes(routes)}
       <Route path="*" element={<Navigate to={isLoggedIn ? "/dashboard" : "/login"} />} />
-      <Route path="/dashboard" element={<Dashboard/>}>  
-        <Route path="complaint" element={<PrivateRoute element={<Dashboard/>} />} />
-        <Route path="order" element={<PrivateRoute element={<Dashboard/>} />} />
-        <Route path="product" element={<PrivateRoute element={<Dashboard/>} />} />
-      </Route>
     </Routes>
   );
 };
+
 
 export default Routing;
