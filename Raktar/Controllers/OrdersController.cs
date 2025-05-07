@@ -7,7 +7,7 @@ namespace Raktar.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Customer,Admin")]
+    [Authorize(Roles = "Customer")]
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;

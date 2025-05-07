@@ -9,7 +9,7 @@ namespace Raktar.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "Supplier,Admin")]
+    [Authorize(Roles = "Supplier")]
     public class DeliveryFormsController : ControllerBase
     {
         private readonly IDeliveryFormService _deliveryFormService;

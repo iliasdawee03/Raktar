@@ -10,7 +10,7 @@ namespace Raktar.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "Customer,Admin")]
+    [Authorize(Roles = "Customer")]
     public class ComplaintsController : ControllerBase
     {
         private readonly IComplaintService _complaintService;
