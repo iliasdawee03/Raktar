@@ -12,10 +12,12 @@
   border-right: 1px solid #f1f1f1;
   justify-content: space-between;
   overflow-y: auto;
+  position: relative;
 }
 
 .navbarMain {
   flex: 1;
+  margin-bottom: 50px;
 }
 
 .header {
@@ -25,6 +27,7 @@
 }
 
 .footer {
+  position: fixed;
   bottom: 0;
   position: absolute;
   margin-bottom: 10px;

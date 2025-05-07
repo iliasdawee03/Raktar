@@ -2,7 +2,7 @@ import { IOrderItemRead } from "./IOrderItemRead";
 
 export interface IOrderRead {
     id: number;
-    CustomerId: number;
+    customerId: number;
     PlacedAt: Date;
     ClosedAt? : Date;
     Status: string;

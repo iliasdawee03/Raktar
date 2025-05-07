@@ -91,13 +91,20 @@ export function NavbarMinimal({toggle}: { toggle: () => void }) {
             />
         ));
 
-    return (
-        <nav className={classes.navbar}>
-            <div>
+        return (
+            <nav className={classes.navbar}>
                 <div className={classes.navbarMain}>
                     {links}
                 </div>
-                <div className={classes.footer} style={{width: !isMobile ? '216px' : '90%'}}>
+                <div className={classes.footer} style={{
+                    width: !isMobile ? '216px' : '90%',
+                    position: 'fixed',
+                    bottom: 0,
+                    left: 0,
+                    backgroundColor: 'var(--mantine-color-body)',
+                    zIndex: 1000,
+                    padding: 'var(--mantine-spacing-md)',
+                }}>
                     <NavbarLink
                         active={location.pathname === '/profile'}
                         icon={IconUserCircle}
@@ -105,14 +112,16 @@ export function NavbarMinimal({toggle}: { toggle: () => void }) {
                         onClick={() => {
                             navigate('/dashboard/profile');
                             toggle();
-                        }} color="grape" />
+                        }} 
+                        color="grape" 
+                    />
                     <NavbarLink
                         icon={IconLogout}
-                        label={"Kijelentkezés"}
-                        onClick={onLogout} color="grape"/>
-
+                        label="Kijelentkezés"
+                        onClick={onLogout} 
+                        color="grape"
+                    />
                 </div>
-            </div>
-        </nav>
-    );
+            </nav>
+        );
 }
