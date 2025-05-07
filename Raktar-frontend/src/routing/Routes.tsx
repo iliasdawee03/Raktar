@@ -4,6 +4,7 @@ import ForgotPassword from "../pages/Forgot.tsx";
 import Complaint from "../pages/Complaint.tsx";
 import Product from "../pages/Product.tsx";
 import Order from "../pages/Order.tsx";
+import Profile from "../pages/Profile.tsx";
 
 export const routes = [
     {
@@ -35,6 +36,12 @@ export const routes = [
                 component : <Order/>,
                 isPrivate : true,
                 title : "Rendelés",
+            },
+            {
+                path : "profile",
+                component : <Profile/>,
+                isPrivate : true,
+                title : "Profil",
             },
         ],
     },

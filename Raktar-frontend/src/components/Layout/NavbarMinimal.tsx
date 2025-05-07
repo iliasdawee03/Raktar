@@ -63,7 +63,7 @@ export function NavbarMinimal({toggle}: { toggle: () => void }) {
         {
             icon: IconArmchair2,
             label : "Termékek",
-            url: "/dashboard/product", // ❗️NEM "products"
+            url: "/dashboard/product", 
             roles : ['Customer', 'Admin'],
         },
     ], []);
@@ -78,14 +78,13 @@ export function NavbarMinimal({toggle}: { toggle: () => void }) {
     }, [menuItems])
 
     const links = menuItems.filter(item => item.roles.includes(role ?? ''))
-        .map((link, index) => (
+        .map((link) => (
             <NavbarLink
                 color="app-color"
                 {...link}
                 key={link.label}
-                active={index === active}
+                active={location.pathname === link.url}
                 onClick={async () => {
-                    setActive(index);
                     toggle();
                     navigate(link.url);
                 }}
@@ -104,7 +103,7 @@ export function NavbarMinimal({toggle}: { toggle: () => void }) {
                         icon={IconUserCircle}
                         label="Profil"
                         onClick={() => {
-                            navigate("/profile");
+                            navigate('/dashboard/profile');
                             toggle();
                         }} color="grape" />
                     <NavbarLink

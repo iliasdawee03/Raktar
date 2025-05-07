@@ -71,6 +71,7 @@ const Order = () => {
             const response = await api.Orders.create(OrderCreate);
             console.log('Rendelés sikeresen létrehozva:', response.data);
             // Sikeres rendelés után navigáció
+            alert("Rendelés sikeresen leadva!");    
             navigate('/dashboard/orders');
             
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
