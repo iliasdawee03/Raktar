@@ -9,7 +9,7 @@ namespace Raktar.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "WarehouseStaff")]
+    [Authorize(Roles = "WarehouseStaff,Admin")]
     public class WarehouseController : ControllerBase
     {
         private readonly IWarehouseService _warehouseService;

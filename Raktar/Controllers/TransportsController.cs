@@ -9,7 +9,7 @@ namespace Raktar.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "Carrier")]
+    [Authorize(Roles = "Carrier,Admin")]
     public class TransportsController : ControllerBase
     {
         private readonly ITransportService _transportService;
