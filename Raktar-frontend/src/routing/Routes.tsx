@@ -3,6 +3,7 @@ import Dashboard from "../pages/Dashboard.tsx";
 import ForgotPassword from "../pages/Forgot.tsx";
 import Complaint from "../pages/Complaint.tsx";
 import Product from "../pages/Product.tsx";
+import Order from "../pages/Order.tsx";
 
 export const routes = [
     {
@@ -28,6 +29,12 @@ export const routes = [
                 component : <Product/>,
                 isPrivate : true,
                 title : "Termékek",
+            },
+            {
+                path : "order",
+                component : <Order/>,
+                isPrivate : true,
+                title : "Rendelés",
             },
         ],
     },
