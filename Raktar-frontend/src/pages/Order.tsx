@@ -65,9 +65,10 @@ const Order = () => {
     
             const OrderCreate: IOrderCreate = {
                 CustomerId: userId,
-                items: [OrderItem],
+                items: [OrderItem], 
             };
     
+            
             const response = await api.Orders.create(OrderCreate);
             console.log('Rendelés sikeresen létrehozva:', response.data);
             // Sikeres rendelés után navigáció

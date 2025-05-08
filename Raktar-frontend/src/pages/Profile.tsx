@@ -9,11 +9,13 @@ import {
     PasswordInput,
     Group,
     Table,
+    Badge,
 } from "@mantine/core";
 import { AuthContext } from '../context/AuthContext';
 import { useForm } from '@mantine/form';
 import api from '../api/api';
 import { IOrderRead } from '../interfaces/order/IOrderRead';
+import { useNavigate } from 'react-router-dom';
 
 interface ProfileFormValues {
     name: string;
@@ -25,6 +27,7 @@ interface ProfileFormValues {
 }
 
 const Profile = () => {
+    const navigate = useNavigate();
     const { email } = useContext(AuthContext);
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -32,6 +35,19 @@ const Profile = () => {
     const [userData, setUserData] = useState<ProfileFormValues | null>(null);
     const [orders, setOrders] = useState<IOrderRead[]>([]); 
     
+    const updateValidation = (order : IOrderRead) => {
+        const currentDate = new Date();
+        const closedDate = new Date(String(order.closedAt));
+        if(closedDate && closedDate > currentDate)
+        {
+            navigate('/dashboard/orderupdate', { 
+                state: { selectedOrder: order }
+            });
+        } else {
+            alert("A rendelés már lezárult, nem módosítható!");
+        }
+    };
+
     const formatDate = (input: unknown): string => {
         if (!input) return '-';
     
@@ -40,7 +56,7 @@ const Profile = () => {
         if (typeof input === 'string' || typeof input === 'number') {
             date = new Date(input);
         } else if (typeof input === 'object' && input !== null && 'date' in input) {
-            date = new Date((input as any).date); // kihúzzuk a `date` mezőt
+            date = new Date((input as any).date); 
         } else if (input instanceof Date) {
             date = input;
         } else {
@@ -130,14 +146,12 @@ const Profile = () => {
         if (email) {
             fetchUserData();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [email]);
 
     const handleSubmit = async (values: ProfileFormValues) => {
         try {
             setLoading(true);
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const updateData: any = {
                 name: values.name,
                 email: values.email,
@@ -243,9 +257,10 @@ const Profile = () => {
             <Table.Tr>
                 <Table.Th>Rendelés azonosító</Table.Th>
                 <Table.Th>Rendelés dátuma</Table.Th>
-                <Table.Th>Lezárás dátuma</Table.Th>
+                <Table.Th>Módosítható eddig</Table.Th>
                 <Table.Th>Termékek</Table.Th>
                 <Table.Th>Státusz</Table.Th>
+                <Table.Th>Művelet</Table.Th>
             </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -263,9 +278,21 @@ const Profile = () => {
                 ))}
             </ul>
         </Table.Td>
-        <Table.Td>{order.Status}</Table.Td>
         <Table.Td>
-            <Button>Törlés</Button>
+        <Badge 
+            color={
+                !order.Status || order.Status === 'null' ? 'yellow' :
+                order.Status === 'Closed' ? 'red' :
+                'green'
+            }
+        >
+            {!order.Status || order.Status === 'null' ? 'pending' :
+            order.Status === 'Closed' ? 'closed' :
+            order.Status}
+        </Badge>
+    </Table.Td>
+        <Table.Td>
+            <Button onClick={() => updateValidation(order)}>Módosítás</Button>
         </Table.Td>
     </Table.Tr>
 ))}
