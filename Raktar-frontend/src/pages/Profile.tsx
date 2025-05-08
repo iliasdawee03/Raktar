@@ -32,22 +32,32 @@ const Profile = () => {
     const [userData, setUserData] = useState<ProfileFormValues | null>(null);
     const [orders, setOrders] = useState<IOrderRead[]>([]); 
     
-    const formatDate = (dateStr: string) => {
-        try {
-            const date = new Date(dateStr);
-            if (isNaN(date.getTime())) return '-';
+    const formatDate = (input: unknown): string => {
+        if (!input) return '-';
     
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hour = String(date.getHours()).padStart(2, '0');
-            const minute = String(date.getMinutes()).padStart(2, '0');
+        let date: Date;
     
-            return `${year}. ${month}. ${day}. ${hour}:${minute}`;
-        } catch {
+        if (typeof input === 'string' || typeof input === 'number') {
+            date = new Date(input);
+        } else if (typeof input === 'object' && input !== null && 'date' in input) {
+            date = new Date((input as any).date); // kihúzzuk a `date` mezőt
+        } else if (input instanceof Date) {
+            date = input;
+        } else {
             return '-';
         }
+    
+        if (isNaN(date.getTime())) return '-';
+    
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hour = String(date.getHours()).padStart(2, '0');
+        const minute = String(date.getMinutes()).padStart(2, '0');
+    
+        return `${year}. ${month}. ${day}. ${hour}:${minute}`;
     };
+    
 
     const form = useForm<ProfileFormValues>({
         initialValues: {
@@ -104,15 +114,8 @@ const Profile = () => {
                     //DEBUG
                     console.log("Orders response:", ordersResponse.data);
                     
-                    const userOrders = ordersResponse.data.filter(order => {
-                        const isMatch = order.customerId === user.id;
-                        console.log(`Comparing order ${order.id}:`, {
-                            order_customerId: order.customerId,
-                            user_id: user.id,
-                            isMatch: isMatch
-                        });
-                        return isMatch;
-                    });
+                    const userOrders = ordersResponse.data
+                    .filter((order: IOrderRead) => order.customerId === user.id);
 
                     console.log("Szűrt rendelések:", userOrders);
                     setOrders(userOrders); 
@@ -249,12 +252,8 @@ const Profile = () => {
         {orders.map((order) => (
     <Table.Tr key={order.id}>
         <Table.Td>{order.id}</Table.Td>
-        <Table.Td>
-            {formatDate(order.PlacedAt ? order.PlacedAt.toString() : '')}
-        </Table.Td>
-        <Table.Td>
-            {formatDate(order.ClosedAt ? order.ClosedAt.toString() : '')}
-        </Table.Td>
+            <Table.Td>{order.placedAt ? formatDate(order.placedAt) : "-"}</Table.Td>
+            <Table.Td>{order.closedAt ? formatDate(order.closedAt) : '-'}</Table.Td>
         <Table.Td>
             <ul style={{ margin: 0, paddingLeft: '20px' }}>
                 {order.items.map((item, index) => (

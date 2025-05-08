@@ -3,8 +3,8 @@ import { IOrderItemRead } from "./IOrderItemRead";
 export interface IOrderRead {
     id: number;
     customerId: number;
-    PlacedAt: Date;
-    ClosedAt? : Date;
-    Status: string;
+    placedAt: string;
+    closedAt? : string;
+    Status: string; 
     items : IOrderItemRead[]
 }
