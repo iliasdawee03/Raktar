@@ -50,6 +50,7 @@ namespace Raktar.Services
         {
             var order = _mapper.Map<Order>(dto);
             order.PlacedAt = DateTime.UtcNow;
+            order.ClosedAt = DateTime.UtcNow.AddHours(24);
             order.Status = "Pending";
 
             await _context.Orders.AddAsync(order);
