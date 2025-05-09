@@ -18,7 +18,7 @@ import { IProductCreate } from "../interfaces/product/IProductCreate";
 const Complaint = {
     getAll: () => axiosInstance.get<IComplaintRead[]>('/api/Complaints'),
     getById: (id: number) => axiosInstance.get<IComplaintRead>(`/api/Complaints/${id}`),
-    create: (complaint: IComplaintCreate) => axiosInstance.post<IComplaintRead>('/api/Complaints', complaint), 
+    create: (complaint: IComplaintCreate) => axiosInstance.post<IComplaintCreate>('/api/Complaints', complaint), 
     delete: async (id: number) => {
         try {
             await axiosInstance.delete<void>(`/api/Complaints/${id}`);

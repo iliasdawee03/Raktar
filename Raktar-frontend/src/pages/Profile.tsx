@@ -36,7 +36,7 @@ const Profile = () => {
     const [orders, setOrders] = useState<IOrderRead[]>([]);
 
     const Complaint = (order : IOrderRead) => {
-        navigate('/dashboard/complaint', {state: { selectedOrder: order }});
+        navigate('/dashboard/complaint', {state: { selectedOrder: order, userId: userId }});
     };
     
     const updateValidation = (order : IOrderRead) => {
@@ -301,7 +301,7 @@ const Profile = () => {
         </Table.Td>
         <Table.Td>
             <Button onClick={() => Complaint(order)}> 
-                Részletek
+                Panasz
             </Button>
         </Table.Td>
     </Table.Tr>
