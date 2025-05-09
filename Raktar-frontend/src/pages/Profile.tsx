@@ -33,7 +33,11 @@ const Profile = () => {
     const [loading, setLoading] = useState(false);
     const [userId, setUserId] = useState<number | null>(null);
     const [userData, setUserData] = useState<ProfileFormValues | null>(null);
-    const [orders, setOrders] = useState<IOrderRead[]>([]); 
+    const [orders, setOrders] = useState<IOrderRead[]>([]);
+
+    const Complaint = (order : IOrderRead) => {
+        navigate('/dashboard/complaint', {state: { selectedOrder: order }});
+    };
     
     const updateValidation = (order : IOrderRead) => {
         const currentDate = new Date();
@@ -179,8 +183,8 @@ const Profile = () => {
     };
 
     return (
-        <Container size="sm">
-            <Paper shadow="xs" p="md" mt="md">
+        <Container>
+            <Paper shadow="xs" p="md" mt="md" style={{ minWidth: '1100px' }}>
                 <Title order={2} mb="md">Profil Beállítások</Title>
 
                 <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -250,17 +254,18 @@ const Profile = () => {
                     </Stack>
                 </form>
             </Paper>
-            <Paper shadow="xs" p="md" mt="xl">
-    <Title order={2} mb="md">Rendelések</Title>
-    <Table>
+            <Paper shadow="xs" mt="xl" style={{ minWidth: '1100px' }}>
+    <Title order={2} mb="md" p="10px">Rendelések</Title>
+    <Table style={{tableLayout: 'fixed', width: '5%'}}>
         <Table.Thead>
             <Table.Tr>
-                <Table.Th>Rendelés azonosító</Table.Th>
-                <Table.Th>Rendelés dátuma</Table.Th>
-                <Table.Th>Módosítható eddig</Table.Th>
-                <Table.Th>Termékek</Table.Th>
-                <Table.Th>Státusz</Table.Th>
-                <Table.Th>Művelet</Table.Th>
+                <Table.Th style={{ width: '150px' }}>Rendelés ID</Table.Th>
+                <Table.Th style={{ width: '170px' }}>Rendelés dátuma</Table.Th>
+                <Table.Th style={{ width: '170px' }}>Módosítható eddig</Table.Th>
+                <Table.Th style={{ width: '250px' }}>Termékek</Table.Th>
+                <Table.Th style={{ width: '120px' }}>Státusz</Table.Th>
+                <Table.Th style={{ width: '120px' }}></Table.Th> {/* Módosítás gomb oszlopa */}
+                <Table.Th style={{ width: '120px' }}></Table.Th> {/* Részletek gomb oszlopa */}
             </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -293,6 +298,11 @@ const Profile = () => {
     </Table.Td>
         <Table.Td>
             <Button onClick={() => updateValidation(order)}>Módosítás</Button>
+        </Table.Td>
+        <Table.Td>
+            <Button onClick={() => Complaint(order)}> 
+                Részletek
+            </Button>
         </Table.Td>
     </Table.Tr>
 ))}

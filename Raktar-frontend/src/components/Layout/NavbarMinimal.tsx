@@ -58,7 +58,7 @@ export function NavbarMinimal({toggle}: { toggle: () => void }) {
             icon: IconAlertOctagon,
             label: "Visszajelzés",
             url: "/dashboard/complaint",
-            roles: ['Customer', 'Supplier', 'Carrier', 'WarehouseStaff', 'Admin'],
+            roles: ['Supplier', 'Carrier', 'WarehouseStaff', 'Admin'],
         }, 
         {
             icon: IconArmchair2,
