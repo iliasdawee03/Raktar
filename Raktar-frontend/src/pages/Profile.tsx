@@ -273,7 +273,7 @@ const Profile = () => {
             <ul style={{ margin: 0, paddingLeft: '20px' }}>
                 {order.items.map((item, index) => (
                     <li key={index}>
-                        {item.ProductName} ({item.Quantity} db)
+                        {item.productName} ({item.quantity} db)
                     </li>
                 ))}
             </ul>
@@ -281,14 +281,14 @@ const Profile = () => {
         <Table.Td>
         <Badge 
             color={
-                !order.Status || order.Status === 'null' ? 'yellow' :
-                order.Status === 'Closed' ? 'red' :
+                !order.status || order.status === 'null' ? 'yellow' :
+                order.status === 'Closed' ? 'red' :
                 'green'
             }
         >
-            {!order.Status || order.Status === 'null' ? 'pending' :
-            order.Status === 'Closed' ? 'closed' :
-            order.Status}
+            {!order.status || order.status === 'null' ? 'pending' :
+            order.status === 'Closed' ? 'closed' :
+            order.status}
         </Badge>
     </Table.Td>
         <Table.Td>

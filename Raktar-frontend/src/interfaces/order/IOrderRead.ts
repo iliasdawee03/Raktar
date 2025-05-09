@@ -5,6 +5,6 @@ export interface IOrderRead {
     customerId: number;
     placedAt: string;
     closedAt? : string;
-    Status: string | null;
+    status: string | null;
     items : IOrderItemRead[]
 }

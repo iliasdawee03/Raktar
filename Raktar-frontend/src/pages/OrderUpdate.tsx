@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { 
     Container, 
@@ -21,13 +21,20 @@ const OrderUpdate = () => {
     
     const selectedOrder = location.state?.selectedOrder as IOrderRead;
     
-    // Állapot a módosított mennyiségek tárolásához
-    const [quantities, setQuantities] = useState(
-        selectedOrder?.items.reduce((acc, item) => ({
-            ...acc,
-            [item.ProductId]: item.Quantity
-        }), {}) || {}
-    );
+
+    const [quantities, setQuantities] = useState<{[key: number]: number}>({}); // Kezdetben üres, és explicit típus
+
+    useEffect(() => {
+        if (selectedOrder?.items) {
+            const initialQuantities = selectedOrder.items.reduce((acc, item) => {
+                acc[item.productId] = item.quantity;
+                return acc;
+            }, {} as {[key: number]: number}); // Explicit típus az accumulatornak is
+            setQuantities(initialQuantities);
+        } else {
+            setQuantities({}); // Ha nincs selectedOrder vagy items, legyen üres
+        }
+    }, [selectedOrder]);
 
     const handleQuantityChange = (productId: number, value: number) => {
         setQuantities(prev => ({
@@ -39,23 +46,47 @@ const OrderUpdate = () => {
     const handleSubmit = async () => {
         try {
             setLoading(true);
-            
-            // IOrderCreate objektum létrehozása a frissítéshez
             const updateOrderData: IOrderCreate = {
-                CustomerId: selectedOrder.customerId,
+                customerId: selectedOrder.customerId,
                 items: selectedOrder.items.map(item => ({
-                    ProductId: item.ProductId,
-                    Quantity: quantities[item.ProductId]
+                    productId: item.productId,
+                    quantity: quantities[item.productId]
                 }))
             };
 
             await api.Orders.update(selectedOrder.id, updateOrderData);
             alert('Rendelés sikeresen frissítve!');
             navigate('/dashboard/profile');
-        } catch (error) {
-            console.error('Hiba történt a rendelés frissítése során:', error);
-            alert('Hiba történt a rendelés frissítése során!');
-        } finally {
+        } catch (error: any) { 
+        console.error('Hiba történt a rendelés frissítése során:', error);
+        let errorMessage = 'Hiba történt a rendelés frissítése során!';
+        if (error.response) {
+
+            if (error.response.status === 404) {
+                errorMessage = 'A módosítani kívánt rendelés nem található vagy már nem módosítható.';
+            } else if (error.response.status === 400) {
+
+                const responseData = error.response.data;
+                if (typeof responseData === 'string') {
+                    errorMessage = responseData;
+                } else if (responseData && typeof responseData.message === 'string') {
+                    errorMessage = responseData.message;
+                } else if (responseData && responseData.errors) {
+
+                    errorMessage = Object.values(responseData.errors).flat().join('\n');
+                } else {
+                    errorMessage = 'Érvénytelen adatok vagy ismeretlen hiba a kérés feldolgozása során.';
+                }
+            } else if (error.response.data && typeof error.response.data.message === 'string') {
+                errorMessage = error.response.data.message;
+            } else if (error.response.data && typeof error.response.data === 'string') {
+                errorMessage = error.response.data;
+            }
+        } else if (error.request) {
+            errorMessage = 'Nem sikerült kapcsolatot létesíteni a szerverrel. Kérjük, ellenőrizze az internetkapcsolatát.';
+        }
+        alert(errorMessage);
+    } finally {
             setLoading(false);
         }
     };
@@ -82,12 +113,12 @@ const OrderUpdate = () => {
                     </Table.Thead>
                     <Table.Tbody>
                         {selectedOrder.items.map((item) => (
-                            <Table.Tr key={item.ProductId}>
-                                <Table.Td>{item.ProductName}</Table.Td>
+                            <Table.Tr key={item.productId}>
+                                <Table.Td>{item.productName}</Table.Td>
                                 <Table.Td>
                                     <NumberInput
-                                        value={quantities[item.ProductId]}
-                                        onChange={(value) => handleQuantityChange(item.ProductId, Number(value))}
+                                        value={quantities[item.productId]}
+                                        onChange={(value) => handleQuantityChange(item.productId, Number(value))}
                                         min={1}
                                         max={999}
                                         stepHoldDelay={500}

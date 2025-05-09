@@ -69,7 +69,7 @@ const Orders = {
     getAll : () => axiosInstance.get<IOrderRead[]>('/api/Orders'),
     getById : (id: number) => axiosInstance.get<IOrderRead>(`/api/Orders/${id}`),
     create : (order: IOrderCreate) => axiosInstance.post<IOrderCreate>('/api/Orders', order),
-    update : (id: number, order: IOrderCreate) => axiosInstance.put<IOrderCreate>(`/api/Orders/${id}`, order),
+    update : (id: number, order: IOrderCreate) => axiosInstance.post<IOrderCreate>(`/api/Orders/${id}`, order),
     delete : (id: number) => axiosInstance.delete<boolean>(`/api/Orders/${id}`),
 };
 

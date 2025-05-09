@@ -59,12 +59,12 @@ const Order = () => {
             }
     
             const OrderItem: IOrderItemCreate = {
-                ProductId: selectedProduct.id,
-                Quantity: quantity,
+                productId: selectedProduct.id,
+                quantity: quantity,
             };
     
             const OrderCreate: IOrderCreate = {
-                CustomerId: userId,
+                customerId: userId,
                 items: [OrderItem], 
             };
     
