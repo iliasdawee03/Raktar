@@ -36,10 +36,10 @@ namespace Raktar.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<DeliveryFormReadDto>> Create(DeliveryFormCreateDto dto)
+        public async Task<ActionResult<DeliveryFormCreateDto>> Create(DeliveryFormCreateDto dto)
         {
             var createdForm = await _deliveryFormService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = createdForm.Id }, createdForm);
+            return Ok(createdForm);
         }
     }
 }
