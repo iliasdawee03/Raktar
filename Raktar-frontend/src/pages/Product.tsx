@@ -38,7 +38,7 @@ const Product = () => {
         return <Loader/>;
     }
     if(error){
-        return <Text color="red">{error}</Text>;
+        return <Text c="red">{error}</Text>;
     }
     return (
         <Container>

@@ -1,10 +1,10 @@
 import { useState, useContext, useEffect } from 'react';
-import { 
-    Container, 
-    Title, 
-    TextInput, 
-    Button, 
-    Paper, 
+import {
+    Container,
+    Title,
+    TextInput,
+    Button,
+    Paper,
     Stack,
     PasswordInput,
     Group,
@@ -15,6 +15,8 @@ import { AuthContext } from '../context/AuthContext';
 import { useForm } from '@mantine/form';
 import api from '../api/api';
 import { IOrderRead } from '../interfaces/order/IOrderRead';
+// Importáld az IUserRead-et és a UserRole-t
+import { IUserRead, UserRole } from '../interfaces/user/IUserRead';
 import { useNavigate } from 'react-router-dom';
 
 interface ProfileFormValues {
@@ -34,17 +36,19 @@ const Profile = () => {
     const [userId, setUserId] = useState<number | null>(null);
     const [userData, setUserData] = useState<ProfileFormValues | null>(null);
     const [orders, setOrders] = useState<IOrderRead[]>([]);
+    // Új state a felhasználó szerepkörének tárolására
+    const [currentUserRole, setCurrentUserRole] = useState<UserRole | null>(null);
 
     const Complaint = (order : IOrderRead) => {
         navigate('/dashboard/complaint', {state: { selectedOrder: order, userId: userId }});
     };
-    
+
     const updateValidation = (order : IOrderRead) => {
         const currentDate = new Date();
         const closedDate = new Date(String(order.closedAt));
         if(closedDate && closedDate > currentDate)
         {
-            navigate('/dashboard/orderupdate', { 
+            navigate('/dashboard/orderupdate', {
                 state: { selectedOrder: order }
             });
         } else {
@@ -54,30 +58,30 @@ const Profile = () => {
 
     const formatDate = (input: unknown): string => {
         if (!input) return '-';
-    
+
         let date: Date;
-    
+
         if (typeof input === 'string' || typeof input === 'number') {
             date = new Date(input);
         } else if (typeof input === 'object' && input !== null && 'date' in input) {
-            date = new Date((input as any).date); 
+            date = new Date((input as any).date);
         } else if (input instanceof Date) {
             date = input;
         } else {
             return '-';
         }
-    
+
         if (isNaN(date.getTime())) return '-';
-    
+
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         const hour = String(date.getHours()).padStart(2, '0');
         const minute = String(date.getMinutes()).padStart(2, '0');
-    
+
         return `${year}. ${month}. ${day}. ${hour}:${minute}`;
     };
-    
+
 
     const form = useForm<ProfileFormValues>({
         initialValues: {
@@ -105,18 +109,21 @@ const Profile = () => {
         const fetchUserData = async () => {
             try {
                 const response = await api.User.getAll();
-                const user = response.data.find(user => user.email === email);
-                
+                // Explicit típusmegadás a user változónak
+                const user: IUserRead | undefined = response.data.find(u => u.email === email);
+
                 console.log("User ID:", user?.id);
                 if (user) {
-                    //DEBUG
                     console.log("Talált felhasználó:", {
                         id: user.id,
                         email: user.email,
-                        typeof_id: typeof user.id
+                        typeof_id: typeof user.id,
+                        role: user.role // Szerepkör logolása
                     });
 
                     setUserId(user.id);
+                    setCurrentUserRole(user.role); // Felhasználó szerepkörének beállítása
+
                     const profileValues: ProfileFormValues = {
                         email: user.email,
                         name: user.name,
@@ -130,15 +137,13 @@ const Profile = () => {
                     form.setValues(profileValues);
                     const ordersResponse = await api.Orders.getAll();
 
- 
-                    //DEBUG
                     console.log("Orders response:", ordersResponse.data);
-                    
+
                     const userOrders = ordersResponse.data
                     .filter((order: IOrderRead) => order.customerId === user.id);
 
                     console.log("Szűrt rendelések:", userOrders);
-                    setOrders(userOrders); 
+                    setOrders(userOrders);
                 } else {
                     console.error("No user found with email:", email);
                 }
@@ -150,7 +155,7 @@ const Profile = () => {
         if (email) {
             fetchUserData();
         }
-    }, [email]);
+    }, [email, form]); // form hozzáadva a dependency array-hez, mert a form.setValues használja
 
     const handleSubmit = async (values: ProfileFormValues) => {
         try {
@@ -254,62 +259,66 @@ const Profile = () => {
                     </Stack>
                 </form>
             </Paper>
-            <Paper shadow="xs" mt="xl" style={{ minWidth: '1100px' }}>
-    <Title order={2} mb="md" p="10px">Rendelések</Title>
-    <Table style={{tableLayout: 'fixed', width: '5%'}}>
-        <Table.Thead>
-            <Table.Tr>
-                <Table.Th style={{ width: '150px' }}>Rendelés ID</Table.Th>
-                <Table.Th style={{ width: '170px' }}>Rendelés dátuma</Table.Th>
-                <Table.Th style={{ width: '170px' }}>Módosítható eddig</Table.Th>
-                <Table.Th style={{ width: '250px' }}>Termékek</Table.Th>
-                <Table.Th style={{ width: '120px' }}>Státusz</Table.Th>
-                <Table.Th style={{ width: '120px' }}></Table.Th> {/* Módosítás gomb oszlopa */}
-                <Table.Th style={{ width: '120px' }}></Table.Th> {/* Részletek gomb oszlopa */}
-            </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-        {orders.map((order) => (
-    <Table.Tr key={order.id}>
-        <Table.Td>{order.id}</Table.Td>
-            <Table.Td>{order.placedAt ? formatDate(order.placedAt) : "-"}</Table.Td>
-            <Table.Td>{order.closedAt ? formatDate(order.closedAt) : '-'}</Table.Td>
-        <Table.Td>
-            <ul style={{ margin: 0, paddingLeft: '20px' }}>
-                {order.items.map((item, index) => (
-                    <li key={index}>
-                        {item.productName} ({item.quantity} db)
-                    </li>
+
+            {/* Feltételes renderelés a Rendelések táblázathoz */}
+            {(currentUserRole === UserRole.Admin || currentUserRole === UserRole.Customer) && (
+                <Paper shadow="xs" mt="xl" style={{ minWidth: '1100px' }}>
+                    <Title order={2} mb="md" p="10px">Rendelések</Title>
+                    <Table style={{tableLayout: 'fixed', width: '100%'}}> {/* width: '5%' valószínűleg elírás volt, 100%-ra javítva */}
+                        <Table.Thead>
+                            <Table.Tr>
+                                <Table.Th style={{ width: '150px' }}>Rendelés ID</Table.Th>
+                                <Table.Th style={{ width: '170px' }}>Rendelés dátuma</Table.Th>
+                                <Table.Th style={{ width: '170px' }}>Módosítható eddig</Table.Th>
+                                <Table.Th style={{ width: '250px' }}>Termékek</Table.Th>
+                                <Table.Th style={{ width: '120px' }}>Státusz</Table.Th>
+                                <Table.Th style={{ width: '120px' }}></Table.Th> {/* Módosítás gomb oszlopa */}
+                                <Table.Th style={{ width: '120px' }}></Table.Th> {/* Panasz gomb oszlopa */}
+                            </Table.Tr>
+                        </Table.Thead>
+                        <Table.Tbody>
+                        {orders.map((order) => (
+                    <Table.Tr key={order.id}>
+                        <Table.Td>{order.id}</Table.Td>
+                            <Table.Td>{order.placedAt ? formatDate(order.placedAt) : "-"}</Table.Td>
+                            <Table.Td>{order.closedAt ? formatDate(order.closedAt) : '-'}</Table.Td>
+                        <Table.Td>
+                            <ul style={{ margin: 0, paddingLeft: '20px' }}>
+                                {order.items.map((item, index) => (
+                                    <li key={index}>
+                                        {item.productName} ({item.quantity} db)
+                                    </li>
+                                ))}
+                            </ul>
+                        </Table.Td>
+                        <Table.Td>
+                        <Badge
+                            color={
+                                !order.status || order.status === 'null' ? 'yellow' :
+                                order.status === 'Closed' ? 'red' :
+                                'green'
+                            }
+                        >
+                            {!order.status || order.status === 'null' ? 'pending' :
+                            order.status === 'Closed' ? 'closed' :
+                            order.status}
+                        </Badge>
+                    </Table.Td>
+                        <Table.Td>
+                            <Button onClick={() => updateValidation(order)}>Módosítás</Button>
+                        </Table.Td>
+                        <Table.Td>
+                            <Button onClick={() => Complaint(order)}>
+                                Panasz
+                            </Button>
+                        </Table.Td>
+                    </Table.Tr>
                 ))}
-            </ul>
-        </Table.Td>
-        <Table.Td>
-        <Badge 
-            color={
-                !order.status || order.status === 'null' ? 'yellow' :
-                order.status === 'Closed' ? 'red' :
-                'green'
-            }
-        >
-            {!order.status || order.status === 'null' ? 'pending' :
-            order.status === 'Closed' ? 'closed' :
-            order.status}
-        </Badge>
-    </Table.Td>
-        <Table.Td>
-            <Button onClick={() => updateValidation(order)}>Módosítás</Button>
-        </Table.Td>
-        <Table.Td>
-            <Button onClick={() => Complaint(order)}> 
-                Panasz
-            </Button>
-        </Table.Td>
-    </Table.Tr>
-))}
-    </Table.Tbody>
-    </Table>
-    </Paper>
-    </Container>
+                    </Table.Tbody>
+                    </Table>
+                </Paper>
+            )}
+        </Container>
     );
 };
 

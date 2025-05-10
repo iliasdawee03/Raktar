@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"; // useState hozzáadása
 import { NavbarMinimal } from "../components/Layout/NavbarMinimal.tsx";
-import { Container, Title } from "@mantine/core"; // Text és Title importálása
+import { Container, Title, Image, Center } from "@mantine/core"; // Text és Title importálása
 import { Outlet, useLocation } from "react-router-dom"; // useLocation importálása
 import { IUserRead, UserRole } from "../interfaces/user/IUserRead.ts"; // UserRole is importálva
 import api from "../api/api.ts";
@@ -71,8 +71,11 @@ const Dashboard = () => {
                 {}
                 {location.pathname === '/dashboard' && currentUser && (
                     <div style={{alignContent: 'center', textAlign: 'center'}}>
-                        <Title order={3} mb="sm">Bejelentkezve: {currentUser.name} </Title>
-                            <Title>Szerepkör : {getRoleName(currentUser.role)}</Title>
+                            <Title order={1} mb="sm">Üdvözöljük {currentUser.name} </Title>
+                            <Title order={2} mb="sm">Szerepköre : {getRoleName(currentUser.role)}</Title>
+                            <Center>
+                                <Image src="/raktar.png" alt="img" w={150} mt={30}/>
+                            </Center>
                     </div>
                 )}
                 {}

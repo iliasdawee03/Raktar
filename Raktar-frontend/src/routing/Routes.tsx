@@ -7,6 +7,8 @@ import Order from "../pages/Order.tsx";
 import Profile from "../pages/Profile.tsx";
 import OrderUpdate from "../pages/OrderUpdate.tsx";
 import Register from "../pages/Register.tsx";
+import SupplierOrders from "../pages/SupplierOrders.tsx";
+import SupplierDeliveryForm from "../pages/SupplierDeliveryForm.tsx";
 
 export const routes = [
     {
@@ -50,6 +52,18 @@ export const routes = [
                 component : <Profile/>,
                 isPrivate : true,
                 title : "Profil",
+            },
+            {
+                path : "supplierorders",
+                component : <SupplierOrders/>,
+                isPrivate : true,
+                title : "Beszáálítói Rendelések",
+            },
+            {
+                path: "supplierdeliveryform",
+                component: <SupplierDeliveryForm/>,
+                isPrivate: true,
+                title: "Szállítói Áruszállítási Űrlap",
             },
         ],
     },

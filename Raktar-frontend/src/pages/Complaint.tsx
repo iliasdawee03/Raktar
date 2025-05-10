@@ -92,19 +92,6 @@ const ComplaintPage = () => {
         }
     };
 
-    // ... (a return rész lényegében változatlan maradhat, csak a userId ellenőrzésnél userIdFromState-et használ)
-    // Például a form megjelenítésének feltétele:
-    // {selectedOrder && userIdFromState && (
-    // ...
-    // )}
-    // És a hibaüzenet, ha a userId hiányzik:
-    // {selectedOrder && !userIdFromState && !error && (
-    //      <Alert icon={<IconAlertCircle size="1rem" />} title="Azonosítási Hiba" color="orange" mb="md">
-    //          A felhasználói azonosító nem érhető el a navigációs adatokból. A panasz beküldéséhez ez szükséges.
-    //      </Alert>
-    // )}
-
-    // A teljes return rész frissítése a userIdFromState használatával:
     if (!selectedOrder && !error && !userIdFromState) {
         return <LoadingOverlay visible={true} />;
     }

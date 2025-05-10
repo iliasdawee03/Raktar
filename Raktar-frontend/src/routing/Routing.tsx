@@ -20,14 +20,13 @@ interface RouteType {
 const renderRoutes = (routes: RouteType[]) => {
   return routes.map((route) => {
     if (route.children) {
-      // Ha vannak nested route-ok
       return (
         <Route
           key={route.path}
           path={route.path}
           element={route.isPrivate ? <PrivateRoute element={route.component} /> : route.component}
         >
-          {renderRoutes(route.children)} {/* Rekurzív feldolgozás */}
+          {renderRoutes(route.children)}
         </Route>
       );
     }
