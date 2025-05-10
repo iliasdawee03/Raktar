@@ -82,6 +82,17 @@ const Login = () => {
                         </Button>
                     </Group>
                     <Divider my="lg" />
+                    <Group p="center" mt="xl">
+                        <Anchor
+                            component="button"
+                            type="button"
+                            c="dimmed"
+                            onClick={() => navigate('/register')}
+                            size="xs"
+                        >
+                            Még nincs fiókod? Regisztrálj most!
+                        </Anchor>
+                    </Group>
                 </form>
             </div>
         </AuthContainer>

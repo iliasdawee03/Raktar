@@ -50,7 +50,7 @@ const Products = {
 const User = {
     getAll: () => axiosInstance.get<IUserRead[]>('/api/Users'),
     getById: (id: number) => axiosInstance.get<IUserRead>(`/api/Users/${id}`),
-    create: (user: IUserCreate) => axiosInstance.post<IUserCreate>('/api/Users', user),
+    create: (user: IUserCreate) => axiosInstance.post<IUserCreate>('/api/Users/register', user),
     update: (id: number, user: IUserUpdate) => axiosInstance.put<boolean>(`/api/Users/${id}`, user),
     delete: (id: number) => axiosInstance.delete<boolean>(`/api/Users/${id}`),
 };

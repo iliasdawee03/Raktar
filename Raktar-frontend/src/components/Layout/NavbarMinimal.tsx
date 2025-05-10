@@ -4,7 +4,6 @@ import {
     IconUserCircle,
     IconLogout,
     IconHome,
-    IconAlertOctagon,
     IconArmchair2,
 } from "@tabler/icons-react";
 import classes from "./NavbarMinimalColored.module.css";
@@ -42,7 +41,7 @@ function NavbarLink({icon: Icon, label, color, active, onClick}: NavbarLinkProps
 export function NavbarMinimal({toggle}: { toggle: () => void }) {
     const theme = useMantineTheme();
     const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
-    const [active, setActive] = useState(0);
+    const [, setActive] = useState(0);
     const navigate = useNavigate();
     const {logout} = useAuth();
     const {role} = useContext(AuthContext);
@@ -54,12 +53,6 @@ export function NavbarMinimal({toggle}: { toggle: () => void }) {
             url: "/dashboard",
             roles: ['Customer', 'Supplier', 'Carrier', 'WarehouseStaff', 'Admin'],
         },
-        {
-            icon: IconAlertOctagon,
-            label: "Visszajelzés",
-            url: "/dashboard/complaint",
-            roles: ['Supplier', 'Carrier', 'WarehouseStaff', 'Admin'],
-        }, 
         {
             icon: IconArmchair2,
             label : "Termékek",

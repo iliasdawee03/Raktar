@@ -6,6 +6,7 @@ import Product from "../pages/Product.tsx";
 import Order from "../pages/Order.tsx";
 import Profile from "../pages/Profile.tsx";
 import OrderUpdate from "../pages/OrderUpdate.tsx";
+import Register from "../pages/Register.tsx";
 
 export const routes = [
     {
@@ -57,5 +58,11 @@ export const routes = [
         component : <ForgotPassword/>,
         isPrivate : false,
         title : "Elfelejtett jelszó",
+    },
+    {
+        path: "/register",
+        component : <Register/>,
+        isPrivate : false,
+        title : "Regisztráció",
     },
 ]
