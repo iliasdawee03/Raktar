@@ -9,6 +9,7 @@ import OrderUpdate from "../pages/OrderUpdate.tsx";
 import Register from "../pages/Register.tsx";
 import SupplierOrders from "../pages/SupplierOrders.tsx";
 import SupplierDeliveryForm from "../pages/SupplierDeliveryForm.tsx";
+import WarehouseStorage from "../pages/WarehouseStorage.tsx";
 
 export const routes = [
     {
@@ -64,6 +65,12 @@ export const routes = [
                 component: <SupplierDeliveryForm/>,
                 isPrivate: true,
                 title: "Szállítói Áruszállítási Űrlap",
+            },
+            {
+                path:"warehouse",
+                component : <WarehouseStorage/>,
+                isPrivate : true,
+                title : "Raktár",
             },
         ],
     },

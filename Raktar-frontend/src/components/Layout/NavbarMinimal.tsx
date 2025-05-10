@@ -6,6 +6,7 @@ import {
     IconHome,
     IconArmchair2,
     IconBasketCheck,
+    IconBorderAll,
 } from "@tabler/icons-react";
 import classes from "./NavbarMinimalColored.module.css";
 import {useNavigate} from "react-router-dom";
@@ -66,6 +67,12 @@ export function NavbarMinimal({toggle}: { toggle: () => void }) {
             url: "/dashboard/supplierorders",
             roles : ['Admin','Supplier'],
         },
+        {
+            icon : IconBorderAll,
+            label : "Raktár kezelés",
+            url : "/dashboard/warehouse",
+            roles : ['WarehouseStaff', 'Admin'],
+        }
     ], []);
 
 

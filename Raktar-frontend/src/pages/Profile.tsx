@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useMemo } from 'react';
 import {
     Container,
     Title,
@@ -15,7 +15,6 @@ import { AuthContext } from '../context/AuthContext';
 import { useForm } from '@mantine/form';
 import api from '../api/api';
 import { IOrderRead } from '../interfaces/order/IOrderRead';
-// Importáld az IUserRead-et és a UserRole-t
 import { IUserRead, UserRole } from '../interfaces/user/IUserRead';
 import { useNavigate } from 'react-router-dom';
 
@@ -36,7 +35,6 @@ const Profile = () => {
     const [userId, setUserId] = useState<number | null>(null);
     const [userData, setUserData] = useState<ProfileFormValues | null>(null);
     const [orders, setOrders] = useState<IOrderRead[]>([]);
-    // Új state a felhasználó szerepkörének tárolására
     const [currentUserRole, setCurrentUserRole] = useState<UserRole | null>(null);
 
     const Complaint = (order : IOrderRead) => {
@@ -82,34 +80,36 @@ const Profile = () => {
         return `${year}. ${month}. ${day}. ${hour}:${minute}`;
     };
 
+const initialFormValues = useMemo(() => ({
+    email: '',
+    name: '',
+    phone: '',
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+}), []);
+
+    const validateForm = useMemo(() => ({
+        email: (value: string) => (/^\S+@\S+$/.test(value) ? null : 'Érvénytelen email cím'),
+        newPassword: (value: string | undefined, values: ProfileFormValues) =>
+            values.newPassword && values.newPassword.length < 6
+                ? 'A jelszó minimum 6 karakter hosszú legyen'
+                : null,
+        confirmPassword: (value: string | undefined, values: ProfileFormValues) =>
+            values.newPassword && value !== values.newPassword
+                ? 'A jelszavak nem egyeznek'
+                : null,
+    }), []);
 
     const form = useForm<ProfileFormValues>({
-        initialValues: {
-            email: '',
-            name: '',
-            phone: '',
-            currentPassword: '',
-            newPassword: '',
-            confirmPassword: ''
-        },
-        validate: {
-            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Érvénytelen email cím'),
-            newPassword: (value, values) =>
-                values.newPassword && values.newPassword.length < 6
-                    ? 'A jelszó minimum 6 karakter hosszú legyen'
-                    : null,
-            confirmPassword: (value, values) =>
-                values.newPassword && value !== values.newPassword
-                    ? 'A jelszavak nem egyeznek'
-                    : null,
-        }
+        initialValues: initialFormValues,
+        validate: validateForm,
     });
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
                 const response = await api.User.getAll();
-                // Explicit típusmegadás a user változónak
                 const user: IUserRead | undefined = response.data.find(u => u.email === email);
 
                 console.log("User ID:", user?.id);
@@ -118,11 +118,11 @@ const Profile = () => {
                         id: user.id,
                         email: user.email,
                         typeof_id: typeof user.id,
-                        role: user.role // Szerepkör logolása
+                        role: user.role
                     });
 
                     setUserId(user.id);
-                    setCurrentUserRole(user.role); // Felhasználó szerepkörének beállítása
+                    setCurrentUserRole(user.role);
 
                     const profileValues: ProfileFormValues = {
                         email: user.email,
@@ -135,15 +135,16 @@ const Profile = () => {
 
                     setUserData(profileValues);
                     form.setValues(profileValues);
+
+                    if(user.role === UserRole.Customer || user.role === UserRole.Admin)
+                    {
                     const ordersResponse = await api.Orders.getAll();
-
                     console.log("Orders response:", ordersResponse.data);
-
                     const userOrders = ordersResponse.data
-                    .filter((order: IOrderRead) => order.customerId === user.id);
-
+                        .filter((order: IOrderRead) => order.customerId === user.id);
                     console.log("Szűrt rendelések:", userOrders);
                     setOrders(userOrders);
+                    }
                 } else {
                     console.error("No user found with email:", email);
                 }
@@ -155,7 +156,7 @@ const Profile = () => {
         if (email) {
             fetchUserData();
         }
-    }, [email, form]); // form hozzáadva a dependency array-hez, mert a form.setValues használja
+    }, [email]);
 
     const handleSubmit = async (values: ProfileFormValues) => {
         try {
@@ -259,8 +260,6 @@ const Profile = () => {
                     </Stack>
                 </form>
             </Paper>
-
-            {/* Feltételes renderelés a Rendelések táblázathoz */}
             {(currentUserRole === UserRole.Admin || currentUserRole === UserRole.Customer) && (
                 <Paper shadow="xs" mt="xl" style={{ minWidth: '1100px' }}>
                     <Title order={2} mb="md" p="10px">Rendelések</Title>

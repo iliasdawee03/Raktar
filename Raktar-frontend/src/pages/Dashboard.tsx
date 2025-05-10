@@ -19,7 +19,7 @@ const getRoleName = (roleValue: UserRole | string | undefined): string => {
     switch (roleValue) {
         case UserRole.Customer: return "Vásárló";
         case UserRole.Supplier: return "Beszállító";
-        case UserRole.Carrier: return "Szállító";
+        case UserRole.Carrier: return "Fuvarozó";
         case UserRole.WarehouseStaff: return "Raktáros";
         case UserRole.Admin: return "Adminisztrátor";
         default: {

@@ -3,5 +3,5 @@ export interface IDeliveryFormRead {
     productId ?: number;
     productName ?: string;
     quantity ?: number;
-    locationId ?: number;
+    locationId ?: string;
 }
