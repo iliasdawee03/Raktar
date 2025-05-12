@@ -19,16 +19,16 @@ const Order = () => {
     const [userId, setUserId] = useState<number | null>(null);
     const {email} = useContext(AuthContext);
     
-
+    // Check if the user is logged in
     useEffect(() => {
         const fetchUserId = async () => {
             try {
                 const response = await api.User.getAll();
-                console.log("All users:", response.data); // Ellenőrizzük a válasz adatait
-                console.log("Current email:", email); // Ellenőrizzük a keresett email-t
+                console.log("All users:", response.data); 
+                console.log("Current email:", email); 
                 
                 const user = response.data.find(user => user.email === email);
-                console.log("Found user:", user); // Ellenőrizzük a talált felhasználót
+                console.log("Found user:", user); 
                 
                 if(user) {
                     console.log("Setting userId to:", user.id);
@@ -41,16 +41,19 @@ const Order = () => {
             }
         };
         
-        if (email) { // Csak akkor futtatjuk, ha van email
+        if (email) {
             fetchUserId();
         }
     },[email]);
     
-    
+    // Check if the selected product is available
+    // If not, redirect to the products page
     if (!state || !state.selectedProduct) {
         return <Navigate to="/products" />;
     }
 
+    // state for navigating to the order page
+    //order finalization
     const { selectedProduct } = state;
     const OrderFinalization = async () => {
         try {
@@ -71,11 +74,9 @@ const Order = () => {
             
             const response = await api.Orders.create(OrderCreate);
             console.log('Rendelés sikeresen létrehozva:', response.data);
-            // Sikeres rendelés után navigáció
             alert("Rendelés sikeresen leadva!");    
             navigate('/dashboard/orders');
             
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             if (error.response?.status === 403) {
                 alert("Nincs megfelelő jogosultsága a rendelés leadásához!");
@@ -86,6 +87,9 @@ const Order = () => {
             }
         }
     };
+
+    //rendering the order page
+    //this page shows the selected product and allows the user to select the quantity
     return (
         <Container>
             <Title order={1} mb="md">Rendelés</Title>

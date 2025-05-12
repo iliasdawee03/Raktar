@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from "react"; // useState hozzáadása
+import { useContext, useEffect, useState } from "react"; 
 import { NavbarMinimal } from "../components/Layout/NavbarMinimal.tsx";
-import { Container, Title, Image, Center } from "@mantine/core"; // Text és Title importálása
-import { Outlet, useLocation } from "react-router-dom"; // useLocation importálása
-import { IUserRead, UserRole } from "../interfaces/user/IUserRead.ts"; // UserRole is importálva
+import { Container, Title, Image, Center } from "@mantine/core"; 
+import { Outlet, useLocation } from "react-router-dom";
+import { IUserRead, UserRole } from "../interfaces/user/IUserRead.ts"; 
 import api from "../api/api.ts";
 import { AuthContext } from "../context/AuthContext.tsx";
 
-// Segédfüggvény a UserRole enum szöveges megjelenítéséhez (ahogy korábban definiáltuk)
+
 const getRoleName = (roleValue: UserRole | string | undefined): string => {
     if (roleValue === undefined) return "Ismeretlen szerepkör";
     if (typeof roleValue === 'string') {
@@ -31,22 +31,22 @@ const getRoleName = (roleValue: UserRole | string | undefined): string => {
 
 const Dashboard = () => {
     const toggleNavbar = () => {
-        // Navbar toggle logika
     };
     const { email } = useContext(AuthContext);
-    const [currentUser, setCurrentUser] = useState<IUserRead | null>(null); // State a felhasználói adatoknak
-    const location = useLocation(); // Aktuális útvonal lekérdezése
+    const [currentUser, setCurrentUser] = useState<IUserRead | null>(null); 
+    const location = useLocation(); 
 
+
+    // Fetch user data based on email
     useEffect(() => {
         const fetchUserData = async () => {
-            if (!email) return; // Ha nincs email, ne fusson le a kérés
+            if (!email) return;
             try {
                 const response = await api.User.getAll();
-                // Fontos: Az IUserRead[] típusú tömböt várjuk a response.data-tól
                 const users: IUserRead[] = response.data;
                 const foundUser = users.find(user => user.email === email);
                 if (foundUser) {
-                    setCurrentUser(foundUser); // Felhasználói adatok beállítása a state-be
+                    setCurrentUser(foundUser); 
                     console.log("Talált felhasználó:", {
                         id: foundUser.id,
                         name: foundUser.name,
@@ -54,7 +54,7 @@ const Dashboard = () => {
                         role: foundUser.role,
                     });
                 } else {
-                    setCurrentUser(null); // Ha nem található, ürítsük a state-et
+                    setCurrentUser(null); 
                     console.error("No user found with email:", email);
                 }
             } catch (error) {
@@ -64,6 +64,9 @@ const Dashboard = () => {
         };
         fetchUserData();
     }, [email]);
+
+
+    //Dashboard component
     return (
         <div style={{ display: "flex", height: '100vh' }}>
             <NavbarMinimal toggle={toggleNavbar} />

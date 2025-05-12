@@ -263,7 +263,7 @@ const initialFormValues = useMemo(() => ({
             {(currentUserRole === UserRole.Admin || currentUserRole === UserRole.Customer) && (
                 <Paper shadow="xs" mt="xl" style={{ minWidth: '1100px' }}>
                     <Title order={2} mb="md" p="10px">Rendelések</Title>
-                    <Table style={{tableLayout: 'fixed', width: '100%'}}> {/* width: '5%' valószínűleg elírás volt, 100%-ra javítva */}
+                    <Table style={{tableLayout: 'fixed', width: '100%'}}>
                         <Table.Thead>
                             <Table.Tr>
                                 <Table.Th style={{ width: '150px' }}>Rendelés ID</Table.Th>
@@ -271,8 +271,8 @@ const initialFormValues = useMemo(() => ({
                                 <Table.Th style={{ width: '170px' }}>Módosítható eddig</Table.Th>
                                 <Table.Th style={{ width: '250px' }}>Termékek</Table.Th>
                                 <Table.Th style={{ width: '120px' }}>Státusz</Table.Th>
-                                <Table.Th style={{ width: '120px' }}></Table.Th> {/* Módosítás gomb oszlopa */}
-                                <Table.Th style={{ width: '120px' }}></Table.Th> {/* Panasz gomb oszlopa */}
+                                <Table.Th style={{ width: '120px' }}></Table.Th> 
+                                <Table.Th style={{ width: '120px' }}></Table.Th> 
                             </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>

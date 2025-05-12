@@ -12,10 +12,12 @@ import { useNavigate } from "react-router-dom";
 import AuthContainer from "../components/AuthContainer.tsx";
 import useAuth from "../hooks/useAuth.tsx";
 
+
 const Login = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
 
+    // Form state and validation
     const form = useForm({
         initialValues: {
             email: '',
@@ -28,6 +30,8 @@ const Login = () => {
         },
     });
 
+    // Submit function with the Login API call
+    // Handle successful login and navigate to the dashboard
     const submit = async () => {
         try {
             await login(form.values.email, form.values.password);
@@ -43,6 +47,7 @@ const Login = () => {
         }
     };
 
+    // Render the login form - NAVBARMINIMAL.tsx
     return (
         <AuthContainer>
             <div>

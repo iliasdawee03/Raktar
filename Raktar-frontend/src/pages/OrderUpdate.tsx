@@ -18,24 +18,24 @@ const OrderUpdate = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    
     const selectedOrder = location.state?.selectedOrder as IOrderRead;
-    
+    const [quantities, setQuantities] = useState<{[key: number]: number}>({}); 
 
-    const [quantities, setQuantities] = useState<{[key: number]: number}>({}); // Kezdetben üres, és explicit típus
-
+    // Check if the selected order is valid -- DELETE THIS LATER
     useEffect(() => {
         if (selectedOrder?.items) {
             const initialQuantities = selectedOrder.items.reduce((acc, item) => {
                 acc[item.productId] = item.quantity;
                 return acc;
-            }, {} as {[key: number]: number}); // Explicit típus az accumulatornak is
+            }, {} as {[key: number]: number});
             setQuantities(initialQuantities);
         } else {
-            setQuantities({}); // Ha nincs selectedOrder vagy items, legyen üres
+            setQuantities({});
         }
     }, [selectedOrder]);
 
+    // Function to handle quantity change
+    // This function updates the quantity of a specific product in the quantities state
     const handleQuantityChange = (productId: number, value: number) => {
         setQuantities(prev => ({
             ...prev,
@@ -43,6 +43,7 @@ const OrderUpdate = () => {
         }));
     };
 
+    // Function to handle form submission
     const handleSubmit = async () => {
         try {
             setLoading(true);
@@ -90,7 +91,7 @@ const OrderUpdate = () => {
             setLoading(false);
         }
     };
-
+    // Check if the selected order is valid
     if (!selectedOrder) {
         return (
             <Container size="sm">
@@ -98,7 +99,8 @@ const OrderUpdate = () => {
             </Container>
         );
     }
-
+    //render the order update form
+    // Check if the selected order has items
     return (
         <Container size="sm">
             <Paper shadow="xs" p="md" mt="md">

@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { Container, Loader, Title, Text, Table, Button, Checkbox, Group } from "@mantine/core"; // Checkbox és Group importálva
 import { IOrderItemRead } from "../interfaces/order/IOrderItemRead";
 
+
+//interface for summarized order items
 export interface ISummarizedOrderItem {
     productId: number;
     productName: string;
@@ -18,9 +20,11 @@ const SupplierOrders = () => {
     const [summarizedItems, setSummarizedItems] = useState<ISummarizedOrderItem[]>([]);
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
     const [selectedProductIds, setSelectedProductIds] = useState<Set<number>>(new Set());
 
+
+    //Fetch orders and orderitems from the API response -> not quite optimal, but it works
+    //useEffect hook to fetch orders and order items when the component mounts
     useEffect(() => {
         const fetchOrdersAndItems = async () => {
             try {
@@ -73,7 +77,8 @@ const SupplierOrders = () => {
         fetchOrdersAndItems();
     }, []);
 
-    // Kezelő a checkbox állapotának változásához
+    //checkbox change handler
+    //this function toggles the selection of a product when the checkbox is clicked
     const handleCheckboxChange = (productId: number) => {
         setSelectedProductIds(prevSelectedIds => {
             const newSelectedIds = new Set(prevSelectedIds);
@@ -86,14 +91,13 @@ const SupplierOrders = () => {
         });
     };
 
-    // Kezelő a kiválasztott termékekkel való navigációhoz
+    // navigate to the SupplierDeliveryForm page with selected items
+    // If no items are selected, show an alert
     const handleNavigateWithSelected = () => {
         const selectedItemsToNavigate = summarizedItems.filter(item => selectedProductIds.has(item.productId));
         if (selectedItemsToNavigate.length > 0) {
             navigate("/dashboard/supplierdeliveryform", {
                 state: {
-                    // Fontos: A fogadó oldalnak ezt a kulcsot kell várnia
-                    // és tudnia kell, hogy ez egy ISummarizedOrderItem tömb.
                     selectedSupplierItems: selectedItemsToNavigate,
                 },
             });
@@ -102,7 +106,7 @@ const SupplierOrders = () => {
         }
     };
 
-
+    // Loading state
     if (isLoading) {
         return (
             <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'calc(100vh - 60px)' }}>
@@ -111,6 +115,8 @@ const SupplierOrders = () => {
         );
     }
 
+
+    //return error message if there is an error
     if (error) {
         return (
             <Container mt="lg">
@@ -118,6 +124,8 @@ const SupplierOrders = () => {
             </Container>
         );
     }
+    //Mantine UI component for displaying the summarized items
+    // If there are no summarized items, show a message
     return (
         <Container>
             <Title order={2} mt="xl" mb="md">Szállítandó termékek</Title>

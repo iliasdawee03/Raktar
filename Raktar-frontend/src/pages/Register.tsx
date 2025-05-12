@@ -65,8 +65,7 @@ const RegisterPage = () => {
             username: values.username,
             email: values.email,
             password: values.password,
-            phoneNumber: values.phoneNumber, // Most már biztosak lehetünk benne (a fenti ellenőrzés után),
-                                           // hogy ez 'number', ahogy az IUserCreate elvárja.
+            phoneNumber: values.phoneNumber,                         
             role: UserRole.Customer,
         };
 

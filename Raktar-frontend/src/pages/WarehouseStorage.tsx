@@ -4,13 +4,14 @@ import { IDeliveryFormRead } from "../interfaces/deliveryforms/IDeliveryFormRead
 import api from "../api/api";
 import { IDeliveredProductRead } from "../interfaces/deliveredproducts/IDeliveredProductRead";
 
+//products summarized for the warehouse
 interface ISummarizedWarehouseProduct {
     productId: number;
     productName?: string;
     totalQuantity: number;
 }
 
-
+//interface for the transfer item
 export interface ITransferItem {
     productId: number;
     productName?: string;
@@ -29,6 +30,8 @@ const WarehouseStorage = () => {
     
     const [locationId, setLocationId] = useState<string>(''); 
 
+
+    //fetch delivery forms and products from the API response
     useEffect(() => {
         const fetchDeliveryForms = async () => {
             try {
@@ -77,6 +80,7 @@ const WarehouseStorage = () => {
         fetchDeliveryForms();
     }, []);
 
+    //handle checkbox change
     const handleCheckboxChange = (productId: number, productName: string | undefined, currentStock: number, checked: boolean) => {
         setSelectedItemsToTransfer(prevMap => {
             const newMap = new Map(prevMap);
@@ -91,6 +95,7 @@ const WarehouseStorage = () => {
         });
     };
 
+    //handle quantity change
     const handleQuantityChange = (productId: number, quantity: number | string) => {
         const numQuantity = Number(quantity);
         setSelectedItemsToTransfer(prevMap => {
@@ -103,7 +108,7 @@ const WarehouseStorage = () => {
         });
     };
 
-
+    //handle create warehouse entries
     const handleCreateWarehouseEntries = async () => {
         if (locationId.trim() === '') {
             alert("Kérjük, adjon meg egy érvényes Raktárhely ID-t!");
@@ -159,6 +164,9 @@ const WarehouseStorage = () => {
             alert("Nincsenek hozzárendelésre kiválasztott termékek (mennyiség > 0).");
         }
     };
+
+    //rendering the component
+    //if loading, show loader
     if (isLoading) {
         return (
             <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'calc(100vh - 120px)' }}>
@@ -167,6 +175,7 @@ const WarehouseStorage = () => {
         );
     }
 
+    //if error, show error message
     if (error) {
         return (
             <Container mt="lg">
@@ -177,10 +186,13 @@ const WarehouseStorage = () => {
         );
     }
 
+    //this function checks if the item is selected or not + quantity
+    //if the item is selected, return the quantity, otherwise return 0
     const isItemSelected = (productId: number) => selectedItemsToTransfer.has(productId);
     const getQuantityForSelected = (productId: number) => selectedItemsToTransfer.get(productId)?.quantity ?? 0;
 
-
+    //rendering the table with summarized products
+    //if there are no summarized products, show message
     return (
         <Container>
             <Title order={2} mt="xl" mb="md">Raktárkészlet Összesítő</Title>

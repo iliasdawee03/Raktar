@@ -12,7 +12,7 @@ import { ISummarizedOrderItem } from '../pages/SupplierOrders'; // Vagy ahonnan 
 import api from '../api/api'; 
 
 interface DeliveryFormValues {
-    supplierId: number | undefined; // Lehet undefined kezdetben
+    supplierId: number | undefined; 
     expectedDeliveryDate: Date | null;
 }
 
@@ -102,7 +102,7 @@ const SupplierDeliveryForm = () => {
             setOriginalSummarizedItems([]);
 
             setTimeout(() => {
-                navigate('/dashboard/deliveryforms'); // Vagy ahova szeretnéd
+                navigate('/dashboard/deliveryforms'); 
             }, 2000);
         } catch (err: any) {
             console.error("Hiba a szállítási űrlap létrehozásakor:", err);

@@ -11,12 +11,13 @@ const Product = () => {
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    //Function to handle the order button click
     const handleOrder = (product: IProductRead) => {
         navigate('/dashboard/order', { 
             state: { selectedProduct: product }
         });
     };
-
+    //Fetch products from the API response
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -33,13 +34,15 @@ const Product = () => {
         };
         fetchProducts();
     }, []);
-
+    //Check if the products are loading or if there is an error
     if(isLoading){
         return <Loader/>;
     }
+    //Check if there is an error
     if(error){
         return <Text c="red">{error}</Text>;
     }
+    //Check if there are no products
     return (
         <Container>
             <Title order={1} mb={"md"}>Termékek</Title>

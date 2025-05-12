@@ -26,8 +26,10 @@ const ComplaintPage = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
-    const [userIdFromState, setUserIdFromState] = useState<number | null>(null); // Új state a userId-nak
+    const [userIdFromState, setUserIdFromState] = useState<number | null>(null); 
 
+    // Check if the selected order is valid and if the userId is available
+    // If not, set an error message
     useEffect(() => {
         let orderFromState: IOrderRead | null = null;
         let idFromState: number | null = null;
@@ -37,7 +39,7 @@ const ComplaintPage = () => {
                 orderFromState = location.state.selectedOrder as IOrderRead;
                 setSelectedOrder(orderFromState);
             }
-            if (location.state.userId) { // Ellenőrizzük, hogy a userId is át lett-e adva
+            if (location.state.userId) { 
                 idFromState = location.state.userId as number;
                 setUserIdFromState(idFromState);
             }
@@ -46,13 +48,14 @@ const ComplaintPage = () => {
         if (!orderFromState) {
             setError("Nincs kiválasztott rendelés a panaszhoz. Kérjük, próbálja újra a rendelések oldalról.");
         }
-        if (!idFromState && orderFromState) { // Csak akkor jelezzük hibaként, ha az order megvan, de a userId hiányzik a state-ből
+        if (!idFromState && orderFromState) { 
             setError(prevError => prevError ? `${prevError}\nFelhasználói azonosító hiányzik a navigációs állapotból.` : "Felhasználói azonosító hiányzik a navigációs állapotból.");
             console.warn("Felhasználói azonosító (userId) nem található a location.state-ben.");
         }
 
     }, [location.state]);
 
+    // Function to handle form submission
     const handleSubmit = async () => {
         if (!selectedOrder) {
             setError("Hiba: A rendelés részletei hiányoznak.");
@@ -92,10 +95,12 @@ const ComplaintPage = () => {
         }
     };
 
+    // Check if the selected order is valid
     if (!selectedOrder && !error && !userIdFromState) {
         return <LoadingOverlay visible={true} />;
     }
 
+    // Render the complaint form
     return (
         <Container size="sm" mt="lg">
             <Paper shadow="md" p="lg" radius="md" withBorder>
