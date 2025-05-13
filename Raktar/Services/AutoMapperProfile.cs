@@ -47,6 +47,7 @@ namespace Raktar.Services
             // Complaint
             CreateMap<Complaint, ComplaintReadDto>();
             CreateMap<ComplaintCreateDto, Complaint>();
+            CreateMap<Complaint, ComplaintCreateDto>();
 
             // DeliveryForm
             CreateMap<DeliveryForm, DeliveryFormReadDto>();

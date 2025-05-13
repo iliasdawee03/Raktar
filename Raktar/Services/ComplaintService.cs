@@ -9,7 +9,7 @@ namespace Raktar.Services
     {
         Task<List<ComplaintReadDto>> GetAllAsync();
         Task<ComplaintReadDto?> GetByIdAsync(int id);
-        Task<ComplaintReadDto> CreateAsync(ComplaintCreateDto dto);
+        Task<ComplaintCreateDto> CreateAsync(ComplaintCreateDto dto);
         Task<bool> DeleteAsync(int id);
     }
     public class ComplaintService : IComplaintService
@@ -42,14 +42,14 @@ namespace Raktar.Services
             return complaint == null ? null : _mapper.Map<ComplaintReadDto>(complaint);
         }
 
-        public async Task<ComplaintReadDto> CreateAsync(ComplaintCreateDto dto)
+        public async Task<ComplaintCreateDto> CreateAsync(ComplaintCreateDto dto)
         {
             var complaint = _mapper.Map<Complaint>(dto);
             complaint.CreatedAt = DateTime.UtcNow;
-
+            complaint.Status = "New";
             await _context.Complaints.AddAsync(complaint);
             await _context.SaveChangesAsync();
-            return _mapper.Map<ComplaintReadDto>(complaint);
+            return _mapper.Map<ComplaintCreateDto>(complaint);
         }
 
         public async Task<bool> DeleteAsync(int id)
