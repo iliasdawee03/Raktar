@@ -55,7 +55,7 @@ namespace Raktar.Services
 
             var user = _mapper.Map<User>(dto);
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-            user.Role = dto.Role == UserRole.Customer ? dto.Role : UserRole.Customer;
+
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
@@ -91,7 +91,7 @@ namespace Raktar.Services
             {
                 throw new UnauthorizedAccessException("Invalid credentials.");
             }
-
+            user.Role = UserRole.Customer;
             return await GenerateToken(user);
         }
         private async Task<string> GenerateToken(User user)

@@ -8,6 +8,7 @@
         public DateTime PlacedAt { get; set; }
         public DateTime? ClosedAt { get; set; }
         public string Status { get; set; }  //Open, Closed, In Transit
+        public int? CarrierId { get; set; }
         public List<OrderItem> Items { get; set; }
     }
 }

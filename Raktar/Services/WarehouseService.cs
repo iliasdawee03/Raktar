@@ -7,7 +7,7 @@ namespace Raktar.Services
     public interface IWarehouseService
     {
         Task<List<WarehouseStorageReadDto>> GetAllStorageAsync();
-        Task<bool> AssignToStorage(int productId, string location);
+        Task<bool> AssignToStorage(int productId, LocationCode location);
     }
     public class WarehouseService : IWarehouseService
     {
@@ -34,7 +34,7 @@ namespace Raktar.Services
             }).ToList();
         }
 
-        public async Task<bool> AssignToStorage(int productId, string location)
+        public async Task<bool> AssignToStorage(int productId, LocationCode location)
         {
             var entry = new WarehouseStorage
             {

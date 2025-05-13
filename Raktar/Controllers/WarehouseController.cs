@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Raktar.Entity;
 using Raktar.Services;
 using static Raktar.Dtos.WarehouseStorageDto;
 
@@ -27,7 +28,7 @@ namespace Raktar.Controllers
         }
 
         [HttpPost("assign")]
-        public async Task<IActionResult> AssignToStorage([FromQuery] int productId, [FromQuery] string location)
+        public async Task<IActionResult> AssignToStorage([FromQuery] int productId, [FromQuery] LocationCode location)
         {
             var result = await _warehouseService.AssignToStorage(productId, location);
             return result ? NoContent() : BadRequest("Failed to assign product to storage.");

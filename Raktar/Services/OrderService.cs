@@ -11,7 +11,7 @@ namespace Raktar.Services
         Task<List<OrderReadDto>> GetAllOrdersAsync();
         Task<OrderReadDto?> GetOrderByIdAsync(int id);
         Task<OrderReadDto> CreateOrderAsync(OrderCreateDto dto);
-        Task<bool> UpdateOrderAsync(int id, OrderCreateDto dto);
+        Task<bool> UpdateOrderAsync(int id, OrderUpdateDto dto);
         Task<bool> DeleteOrderAsync(int id);
     }
 
@@ -59,15 +59,13 @@ namespace Raktar.Services
             return _mapper.Map<OrderReadDto>(order);
         }
 
-            public async Task<bool> UpdateOrderAsync(int id, OrderCreateDto dto)
+            public async Task<bool> UpdateOrderAsync(int id, OrderUpdateDto dto)
             {
                 var existingOrder = await _context.Orders
                     .Include(o => o.Items)
                     .FirstOrDefaultAsync(o => o.Id == id);
 
-                //if (existingOrder == null || existingOrder.ClosedAt != null)
-                //    return false;
-            if (existingOrder == null) { return false; }
+                if (existingOrder == null) { return false; }
 
                 _context.OrderItems.RemoveRange(existingOrder.Items);
 
