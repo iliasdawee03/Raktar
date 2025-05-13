@@ -52,11 +52,11 @@ SET IDENTITY_INSERT Complaints OFF;
 -- WarehouseStorage
 SET IDENTITY_INSERT WarehouseStorages ON;
 INSERT INTO WarehouseStorages (Id, ProductId, LocationCode, Quantity) VALUES
-(1, 1, 'A1-01', 10),
-(2, 2, 'A1-02', 50),
-(3, 3, 'B2-03', 20),
-(4, 4, 'C3-04', 15),
-(5, 5, 'D4-05', 100);
+(1, 1, 1, 10),
+(2, 2, 2, 50),
+(3, 3, 3, 20),
+(4, 4, 4, 15),
+(5, 5, 5, 100);
 SET IDENTITY_INSERT WarehouseStorages OFF;
 
 -- DeliveryForm
