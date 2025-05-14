@@ -1,4 +1,4 @@
-export interface IDeliveryFormRead {
+export interface IWarehouseStorageRead {
     id : number;
     productId : number;
     productName : string;

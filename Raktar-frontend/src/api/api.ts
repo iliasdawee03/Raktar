@@ -13,6 +13,7 @@ import { IDeliveryFormRead } from "../interfaces/deliveryforms/IDeliveryFormRead
 import { IProductRead } from "../interfaces/product/IProductRead";
 import { IProductCreate } from "../interfaces/product/IProductCreate";
 import { IOrderUpdate } from "../interfaces/order/IOrderUpdate";
+import { IWarehouseStorageRead, LocationCode } from "../interfaces/warehouse/IWarehouseStorageRead";
 
 
 //Complain API
@@ -61,8 +62,8 @@ const Auth = {login: (email: string, password: string) => axiosInstance.post<{ t
 
 // Warehouse API
 const Warehouse = {
-    getAll: () => axiosInstance.get('/api/Warehouse'),
-    assign: (productId: number, locationId: string) => axiosInstance.post(`/api/Warehouse/assign`, { productId, locationId }),
+    getAll: () => axiosInstance.get<IWarehouseStorageRead[]>('/api/Warehouse'),
+    assign: (productId: number, locationCode: LocationCode) => axiosInstance.post(`/api/Warehouse/assign`, { productId, locationCode }),
 };
 
 // Orders API (Placeholder, as no specific functions were provided)
