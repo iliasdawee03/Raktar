@@ -32,10 +32,10 @@ namespace Raktar.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<OrderReadDto>> Create(OrderCreateDto dto)
+        public async Task<ActionResult<OrderCreateDto>> Create(OrderCreateDto dto)
         {
             var order = await _orderService.CreateOrderAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = order.Id }, order);
+            return Ok(dto);
         }
 
         [HttpPost("{id}")]

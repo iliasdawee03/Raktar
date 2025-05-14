@@ -10,7 +10,7 @@ namespace Raktar.Services
     {
         Task<List<OrderReadDto>> GetAllOrdersAsync();
         Task<OrderReadDto?> GetOrderByIdAsync(int id);
-        Task<OrderReadDto> CreateOrderAsync(OrderCreateDto dto);
+        Task<OrderCreateDto> CreateOrderAsync(OrderCreateDto dto);
         Task<bool> UpdateOrderAsync(int id, OrderUpdateDto dto);
         Task<bool> DeleteOrderAsync(int id);
     }
@@ -46,35 +46,35 @@ namespace Raktar.Services
             return order == null ? null : _mapper.Map<OrderReadDto>(order);
         }
 
-        public async Task<OrderReadDto> CreateOrderAsync(OrderCreateDto dto)
+        public async Task<OrderCreateDto> CreateOrderAsync(OrderCreateDto dto)
         {
             var order = _mapper.Map<Order>(dto);
             order.PlacedAt = DateTime.UtcNow;
             order.ClosedAt = DateTime.UtcNow.AddHours(24);
-            order.Status = "Pending";
+            order.Status = "Open";
 
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<OrderReadDto>(order);
+            return _mapper.Map<OrderCreateDto>(order);
         }
 
-            public async Task<bool> UpdateOrderAsync(int id, OrderUpdateDto dto)
-            {
-                var existingOrder = await _context.Orders
-                    .Include(o => o.Items)
-                    .FirstOrDefaultAsync(o => o.Id == id);
+        public async Task<bool> UpdateOrderAsync(int id, OrderUpdateDto dto)
+        {
+            var existingOrder = await _context.Orders
+                .Include(o => o.Items)
+                .FirstOrDefaultAsync(o => o.Id == id);
 
-                if (existingOrder == null) { return false; }
+            if (existingOrder == null) { return false; }
 
-                _context.OrderItems.RemoveRange(existingOrder.Items);
+            _context.OrderItems.RemoveRange(existingOrder.Items);
 
-                var updatedItems = _mapper.Map<List<OrderItem>>(dto.Items);
-                existingOrder.Items = updatedItems;
+            var updatedItems = _mapper.Map<List<OrderItem>>(dto.Items);
+            existingOrder.Items = updatedItems;
 
-                await _context.SaveChangesAsync();
-                return true;
-            }
+            await _context.SaveChangesAsync();
+            return true;
+        }
 
         public async Task<bool> DeleteOrderAsync(int id)
         {
