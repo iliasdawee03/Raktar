@@ -9,7 +9,7 @@ namespace Raktar.Services
     {
         Task<List<TransportReadDto>> GetAllAsync();
         Task<TransportReadDto?> GetByIdAsync(int id);
-        Task<TransportReadDto> CreateAsync(TransportCreateDto dto);
+        Task<TransportCreateDto> CreateAsync(TransportCreateDto dto);
         Task<bool> UpdateStatusAsync(int id, string newStatus);
     }
     public class TransportService : ITransportService
@@ -42,14 +42,14 @@ namespace Raktar.Services
             return transport == null ? null : _mapper.Map<TransportReadDto>(transport);
         }
 
-        public async Task<TransportReadDto> CreateAsync(TransportCreateDto dto)
+        public async Task<TransportCreateDto> CreateAsync(TransportCreateDto dto)
         {
             var transport = _mapper.Map<Transport>(dto);
-            transport.Status = "Waiting";
+            transport.Status = "Ready";
 
             await _context.Transports.AddAsync(transport);
             await _context.SaveChangesAsync();
-            return _mapper.Map<TransportReadDto>(transport);
+            return _mapper.Map<TransportCreateDto>(transport);
         }
 
         public async Task<bool> UpdateStatusAsync(int id, string newStatus)

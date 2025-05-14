@@ -9,7 +9,7 @@ namespace Raktar.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "Carrier,Admin")]
+    [Authorize(Roles = "Carrier,Admin,WarehouseStaff")]
     public class TransportsController : ControllerBase
     {
         private readonly ITransportService _transportService;
@@ -37,10 +37,10 @@ namespace Raktar.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<TransportReadDto>> Create(TransportCreateDto dto)
+        public async Task<ActionResult<TransportCreateDto>> Create(TransportCreateDto dto)
         {
             var createdTransport = await _transportService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = createdTransport.Id }, createdTransport);
+            return Ok(dto);
         }
 
         [HttpPut("{id}/status")]
