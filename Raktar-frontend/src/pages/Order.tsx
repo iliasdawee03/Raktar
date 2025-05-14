@@ -1,123 +1,147 @@
 import { useEffect, useContext, useState } from "react";
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
-import { Container, Title, Text, Card, Group, Button, NumberInput } from "@mantine/core";
-import { IProductRead } from "../interfaces/product/IProductRead";
-import { IOrderItemCreate } from "../interfaces/order/IOrderItemCreate";
+import { Container, Title, Card, Group, Button, Table, Alert } from "@mantine/core";
+import { IOrderItemCreate } from "../interfaces/order/IOrderItemCreate"; // Ez az interfész csak productId-t és quantity-t tartalmaz
 import { AuthContext } from "../context/AuthContext";
 import { IOrderCreate } from "../interfaces/order/IOrderCreate";
 import api from "../api/api";
 
 interface LocationState {
-    selectedProduct: IProductRead | null;
+    orderItems: IOrderItemCreate[]; 
 }
 
 const Order = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const state = location.state as LocationState | null;
-    const [quantity, setQuantity] = useState<number>(1);
     const [userId, setUserId] = useState<number | null>(null);
-    const {email} = useContext(AuthContext);
-    
-    // Check if the user is logged in
+    const { email } = useContext(AuthContext);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+
     useEffect(() => {
         const fetchUserId = async () => {
             try {
                 const response = await api.User.getAll();
-                console.log("All users:", response.data); 
-                console.log("Current email:", email); 
-                
-                const user = response.data.find(user => user.email === email);
-                console.log("Found user:", user); 
-                
-                if(user) {
-                    console.log("Setting userId to:", user.id);
+                const user = response.data.find(u => u.email === email);
+                if (user) {
                     setUserId(user.id);
                 } else {
-                    console.error("No user found with email:", email);
+                    console.error("Bejelentkezett felhasználó nem található az email alapján:", email);
+                    alert("Hiba: A felhasználói adatok nem töltődtek be megfelelően. Kérjük, jelentkezzen be újra.");
+                    navigate('/login');
                 }
             } catch (error) {
-                console.error("Error fetching user ID:", error);
+                console.error("Hiba a felhasználói ID lekérése közben:", error);
+                alert("Hiba történt a felhasználói adatok lekérése során.");
             }
         };
-        
+
         if (email) {
             fetchUserId();
+        } else {
+            alert("Kérjük, jelentkezzen be a rendelés folytatásához.");
+            navigate('/login');
         }
-    },[email]);
-    
-    // Check if the selected product is available
-    // If not, redirect to the products page
-    if (!state || !state.selectedProduct) {
-        return <Navigate to="/products" />;
+    }, [email, navigate]);
+
+    if (!state || !state.orderItems || !Array.isArray(state.orderItems) ){
+        console.warn("A rendelési oldal rendelési tételek nélkül lett megnyitva (vagy hiba történt), átirányítás a termékekhez...");
+        if (!state?.orderItems || state.orderItems.length === 0) {
+             return <Navigate to="/dashboard/products" />;
+        }
     }
 
-    // state for navigating to the order page
-    //order finalization
-    const { selectedProduct } = state;
+    const { orderItems } = state || { orderItems: [] }; 
+
     const OrderFinalization = async () => {
+
+        if (!userId) {
+            alert("A felhasználói adatok nem érhetők el. Kérjük, próbálja meg később, vagy jelentkezzen be újra.");
+            return;
+        }
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
+
         try {
-            if (!userId) {
-                throw new Error("Nincs bejelentkezett felhasználó!");
-            }
-    
-            const OrderItem: IOrderItemCreate = {
-                productId: selectedProduct.id,
-                quantity: quantity,
-            };
-    
-            const OrderCreate: IOrderCreate = {
+            const orderCreatePayload: IOrderCreate = {
                 customerId: userId,
-                items: [OrderItem], 
+                items: orderItems, 
             };
-    
-            
-            const response = await api.Orders.create(OrderCreate);
+
+            const response = await api.Orders.create(orderCreatePayload);
             console.log('Rendelés sikeresen létrehozva:', response.data);
-            alert("Rendelés sikeresen leadva!");    
-            navigate('/dashboard/orders');
-            
+            alert("Rendelés sikeresen leadva!");
+            navigate('/dashboard'); 
+
         } catch (error: any) {
             if (error.response?.status === 403) {
                 alert("Nincs megfelelő jogosultsága a rendelés leadásához!");
                 navigate('/login');
             } else {
                 console.error('Hiba történt a rendelés során:', error);
-                alert("Hiba történt a rendelés feldolgozása során!");
+                alert(`Hiba történt a rendelés feldolgozása során: ${error.message || 'Ismeretlen hiba'}`);
             }
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
-    //rendering the order page
-    //this page shows the selected product and allows the user to select the quantity
+    const handleBackToProducts = () => {
+        navigate('/dashboard/product', { 
+            state: { currentOrderState: orderItems } 
+        });
+    };
+
     return (
         <Container>
-            <Title order={1} mb="md">Rendelés</Title>
-            <Card withBorder p="md">
-                <Group justify="space-between" align="flex-start">
-                    <div>
-                        <Text fw={500} size="lg" mb="xs">Kiválasztott termék:</Text>
-                        <Text>Név: {selectedProduct.name}</Text>
-                        <Text>Ár: {selectedProduct.price} Ft</Text>
-                    </div>
-                    <div>
-                        <NumberInput
-                            label="Mennyiség"
-                            placeholder="1"
-                            min={1}
-                            max={10}
-                            defaultValue={1}
-                            value={quantity}
-                            onChange={(value) => setQuantity(typeof value === "number" ? value : 1)}
-                            withAsterisk
-                            mb="md"
-                        />
-                    </div>
-                    <Button variant="filled" color="blue" onClick={OrderFinalization}>
-                        Rendelés leadása
-                    </Button>
-                </Group>
+            <Title order={1} mb="xl">Rendelés Véglegesítése</Title>
+
+            <Card withBorder p="lg" radius="md" shadow="sm" mb="xl">
+                <Title order={3} mb="md">Rendelési Tételek</Title>
+                {orderItems.length > 0 ? (
+                    <Table striped highlightOnHover withTableBorder>
+                        <Table.Thead>
+                            <Table.Tr>
+                                <Table.Th>Termék ID</Table.Th>
+                                <Table.Th>Mennyiség</Table.Th>
+                            </Table.Tr>
+                        </Table.Thead>
+                        <Table.Tbody>
+                            {orderItems.map((item, index) => (
+                                <Table.Tr key={`${item.productId}-${index}`}> 
+                                    <Table.Td>{item.productId}</Table.Td>
+                                    <Table.Td>{item.quantity} db</Table.Td>
+                                </Table.Tr>
+                            ))}
+                        </Table.Tbody>
+                    </Table>
+                ) : (
+                    <Alert color="orange" title="Nincsenek tételek">
+                        Nincsenek termékek a rendelésben. Kérjük, válasszon termékeket.
+                    </Alert>
+                )}
             </Card>
+
+            <Group justify="space-between" mt="xl">
+                <Button
+                    variant="outline"
+                    onClick={handleBackToProducts}
+                    disabled={isSubmitting} 
+                >
+                    További termékek hozzáadása
+                </Button>
+                <Button
+                    variant="filled"
+                    color="blue"
+                    onClick={OrderFinalization}
+                    disabled={isSubmitting || orderItems.length === 0 || !userId}
+                    loading={isSubmitting}
+                >
+                    Rendelés Leadása
+                </Button>
+            </Group>
         </Container>
     );
 };

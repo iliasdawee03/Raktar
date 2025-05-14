@@ -10,6 +10,11 @@ import Register from "../pages/Register.tsx";
 import SupplierOrders from "../pages/SupplierOrders.tsx";
 import SupplierDeliveryForm from "../pages/SupplierDeliveryForm.tsx";
 import WarehouseStorage from "../pages/WarehouseStorage.tsx";
+import OrderDelivery from "../pages/OrderDelivery.tsx";
+import WarehouseForm from "../pages/WarehouseForm.tsx";
+import StorageView from "../pages/StorageView.tsx";
+import CarrierAssign from "../pages/CarrierAssign.tsx";
+import AllComplaints from "../pages/allComplaints.tsx";
 
 export const routes = [
     {
@@ -25,7 +30,7 @@ export const routes = [
         title: "Kezdőlap",
         children: [
             {
-                path : "complaint",
+                path : "complaints",
                 component : <Complaint/>,
                 isPrivate : true,
                 title : "Visszajelzés",
@@ -58,7 +63,7 @@ export const routes = [
                 path : "supplierorders",
                 component : <SupplierOrders/>,
                 isPrivate : true,
-                title : "Beszáálítói Rendelések",
+                title : "Beszálítói Rendelések",
             },
             {
                 path: "supplierdeliveryform",
@@ -67,10 +72,40 @@ export const routes = [
                 title: "Szállítói Áruszállítási Űrlap",
             },
             {
-                path:"warehouse",
+                path:"warehousedelivery",
                 component : <WarehouseStorage/>,
                 isPrivate : true,
                 title : "Raktár",
+            },
+            {
+                path:"orderdelivery",
+                component : <OrderDelivery/>,
+                isPrivate : true,
+                title : "Kiszállítás",
+            },
+            {
+                path:"warehouseforms",
+                component: <WarehouseForm/>,
+                isPrivate: true,
+                title : "Raktárba érkezett fuvar",
+            },
+            {
+                path : "storage",
+                component : <StorageView/>,
+                isPrivate : true,
+                title : "Tárhely kezelés",
+            },
+            {
+                path: "assign",
+                component : <CarrierAssign/>,
+                isPrivate : true,
+                title : "Futárok osztása",
+            },
+            {
+                path: "allcomplaints",
+                component : <AllComplaints/>,
+                isPrivate : true,
+                title : "Összes panasz",
             },
         ],
     },

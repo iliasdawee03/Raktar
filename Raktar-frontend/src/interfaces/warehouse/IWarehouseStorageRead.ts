@@ -3,7 +3,7 @@ export interface IWarehouseStorageRead {
     productId : number;
     productName : string;
     quantity : number;
-    locationId : LocationCode;
+    locationCode: LocationCode;
 }
 export enum LocationCode {
     E1,

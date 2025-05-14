@@ -52,7 +52,7 @@ import { jwtDecode }from "jwt-decode";
             if (storedEmail) setEmail(storedEmail);
             if (storedRole) setRole(storedRole);
     
-            setIsLoading(false); // Betöltés kész
+            setIsLoading(false); 
         }, [setToken, setEmail, setRole]);
     return { login, logout, token, email, isLoggedIn, isLoading, role };
 };

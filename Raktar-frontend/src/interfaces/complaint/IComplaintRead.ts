@@ -1,8 +1,8 @@
 export interface IComplaintRead {
     id ?: number;
-    OrderId ?: number;  
-    UserId ?: number;   
-    Description ?: string;
-    Status ?: string;
-    CreatedAt ?: Date;
+    orderId ?: number;  
+    userId ?: number;   
+    description ?: string;
+    status ?: string;
+    createdAt ?: Date;
 }

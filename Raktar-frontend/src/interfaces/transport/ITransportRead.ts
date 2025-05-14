@@ -1,8 +1,8 @@
 export interface ITransportRead {
     id: number;
-    CarrierId: number;
-    OrderId: number;
-    Status: string;
-    StartDate?: Date;
-    EndDate?: Date;  
+    carrierId: number;
+    orderId: number;
+    status: string;
+    startDate?: Date;
+    endDate?: Date;  
 }

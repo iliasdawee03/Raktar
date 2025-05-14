@@ -1,4 +1,4 @@
-// Feltételezett fogadó komponens (pl. SupplierDeliveryForm.tsx)
+
 
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';

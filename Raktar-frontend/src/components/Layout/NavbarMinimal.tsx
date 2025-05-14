@@ -7,6 +7,10 @@ import {
     IconArmchair2,
     IconBasketCheck,
     IconBorderAll,
+    IconAirBalloon,
+    Icon3dCubeSphere,
+    IconAdCircle,
+    IconExclamationCircle,
 } from "@tabler/icons-react";
 import classes from "./NavbarMinimalColored.module.css";
 import {useNavigate} from "react-router-dom";
@@ -69,10 +73,46 @@ export function NavbarMinimal({toggle}: { toggle: () => void }) {
         },
         {
             icon : IconBorderAll,
-            label : "Raktár kezelés",
+            label : "Raktár fuvar",
             url : "/dashboard/warehouse",
+            roles : ['Carrier', 'Admin'],
+        },
+        {
+            icon : IconBorderAll,
+            label : "Beérkezett fuvar",
+            url : "/dashboard/warehouseforms",
             roles : ['WarehouseStaff', 'Admin'],
-        }
+        },
+        {
+            icon : IconAirBalloon,
+            label : "Kiszállítás",
+            url : "/dashboard/orderdelivery",
+            roles : ['Carrier', 'Admin'],
+        },
+        {
+            icon : IconBorderAll,
+            label : "Reklamációk",
+            url : "/dashboard/complaints",
+            roles : ['Admin'],
+        },
+        {
+            icon : Icon3dCubeSphere,
+            label : "Tárhely kezelés",
+            url : "/dashboard/storage",
+            roles : ['WarehouseStaff', 'Admin'],
+        },
+        {
+            icon: IconAdCircle,
+            label : "Futárok osztása",
+            url : "/dashboard/assign",
+            roles : ['WarehouseStaff', 'Admin'],
+        },
+        {
+            icon : IconExclamationCircle,
+            label : "Összes panasz",
+            url : "/dashboard/allcomplaints",
+            roles : ['Admin'],
+        },
     ], []);
 
 

@@ -13,7 +13,9 @@ import { IDeliveryFormRead } from "../interfaces/deliveryforms/IDeliveryFormRead
 import { IProductRead } from "../interfaces/product/IProductRead";
 import { IProductCreate } from "../interfaces/product/IProductCreate";
 import { IOrderUpdate } from "../interfaces/order/IOrderUpdate";
-import { IWarehouseStorageRead, LocationCode } from "../interfaces/warehouse/IWarehouseStorageRead";
+import { IWarehouseStorageRead} from "../interfaces/warehouse/IWarehouseStorageRead";
+import { IDeliveryFormUpdate } from "../interfaces/deliveryforms/IDeliveryFormUpdate";
+import { IWarehouseStorageCreate } from "../interfaces/warehouse/IWarehouseStorageCreate";
 
 
 //Complain API
@@ -37,11 +39,11 @@ const DeliveryForm = {
     getAll: () => axiosInstance.get<IDeliveryFormRead[]>('/api/DeliveryForms'),
     getById: (id: number) => axiosInstance.get<IDeliveryFormRead>(`/api/DeliveryForms/${id}`),
     create : (deliveryForm: IDeliveryFormCreate) => axiosInstance.post<IDeliveryFormCreate>('/api/DeliveryForms', deliveryForm),
+    update : (id : number , deliveryFormUpdate : IDeliveryFormUpdate) => axiosInstance.put<IDeliveryFormUpdate>(`/api/DeliveryForms/${id}`, deliveryFormUpdate),
 };
 
-//Products API
 const Products = {
-    getAll : () => axiosInstance.get<IProductRead>('/api/Products'),
+    getAll : () => axiosInstance.get<IProductRead[]>('/api/Products'),
     getById : (id: number) => axiosInstance.get<IProductRead>(`/api/Products/${id}`),
     create : (product: IProductCreate) => axiosInstance.post<IProductCreate>('/api/Products', product),
     delete : (id: number) => axiosInstance.delete<any>(`/api/Products/${id}`),
@@ -63,7 +65,8 @@ const Auth = {login: (email: string, password: string) => axiosInstance.post<{ t
 // Warehouse API
 const Warehouse = {
     getAll: () => axiosInstance.get<IWarehouseStorageRead[]>('/api/Warehouse'),
-    assign: (productId: number, locationCode: LocationCode) => axiosInstance.post(`/api/Warehouse/assign`, { productId, locationCode }),
+    assign: (WarehouseStorageCreate : IWarehouseStorageCreate) => 
+    axiosInstance.post(`/api/Warehouse/update`, WarehouseStorageCreate),
 };
 
 // Orders API (Placeholder, as no specific functions were provided)
@@ -80,7 +83,8 @@ const Transport = {
     getAll: () => axiosInstance.get<ITransportRead[]>('/api/Transports'),
     getById: (id : number) => axiosInstance.get<ITransportRead>(`/api/Transports/${id}`),
     create: (transport : ITransportCreate) => axiosInstance.post<ITransportCreate>('/api/Transports', transport),
-    updateStatus: (id: number, status: string) => axiosInstance.put<any>(`/api/Transports/${id}`, { status }),
+    updateStatus: (id: number, status: string, endDate?: Date) => 
+        axiosInstance.put<any>(`/api/Transports/${id}/status`, { newStatus: status, endDate: endDate }),
 };
 
 //Exporting all API functions
