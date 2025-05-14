@@ -7,7 +7,7 @@
         public User Customer { get; set; }
         public DateTime PlacedAt { get; set; }
         public DateTime? ClosedAt { get; set; }
-        public string Status { get; set; }  //Open, Closed, In Transit
+        public string Status { get; set; }  //  Open,In Transit, Closed 
         public int? CarrierId { get; set; }
         public List<OrderItem> Items { get; set; }
     }
