@@ -10,7 +10,7 @@ namespace Raktar.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "WarehouseStaff,Admin")]
+    [Authorize(Roles = "WarehouseStaff,Admin, Carrier")]
     public class WarehouseController : ControllerBase
     {
         private readonly IWarehouseService _warehouseService;
@@ -28,9 +28,9 @@ namespace Raktar.Controllers
         }
 
         [HttpPost("assign")]
-        public async Task<IActionResult> AssignToStorage([FromQuery] int productId, [FromQuery] LocationCode location)
+        public async Task<IActionResult> AssignToStorage([FromBody] WarehouseStorageCreateDto dto)
         {
-            var result = await _warehouseService.AssignToStorage(productId, location);
+            var result = await _warehouseService.AssignToStorage(dto);
             return result ? NoContent() : BadRequest("Failed to assign product to storage.");
         }
     }

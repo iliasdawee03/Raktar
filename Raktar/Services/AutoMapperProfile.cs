@@ -64,7 +64,7 @@ namespace Raktar.Services
             // WarehouseStorage
             CreateMap<WarehouseStorage, WarehouseStorageReadDto>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
-            CreateMap<WarehouseStorageCreateDto, WarehouseStorage>();
+            CreateMap<WarehouseStorageCreateDto, WarehouseStorage>().ReverseMap();
         }
     }
 }
