@@ -36,10 +36,10 @@ namespace Raktar.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<ProductReadDto>> Create(ProductCreateDto dto)
+        public async Task<ActionResult<ProductCreateDto>> Create(ProductCreateDto dto)
         {
             var createdProduct = await _productService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = createdProduct.Id }, createdProduct);
+            return Ok(dto);
         }
 
         [HttpPut("{id}")]
