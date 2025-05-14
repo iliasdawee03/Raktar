@@ -44,9 +44,9 @@ namespace Raktar.Controllers
         }
 
         [HttpPut("{id}/status")]
-        public async Task<IActionResult> UpdateStatus(int id, [FromBody] string newStatus)
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody] string newStatus, DateTime? endDate)
         {
-            var result = await _transportService.UpdateStatusAsync(id, newStatus);
+            var result = await _transportService.UpdateStatusAsync(id, newStatus, endDate);
             return result ? NoContent() : NotFound();
         }
     }
