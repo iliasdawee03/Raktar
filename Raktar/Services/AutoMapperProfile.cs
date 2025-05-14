@@ -38,11 +38,11 @@ namespace Raktar.Services
             CreateMap<ProductCreateDto, Product>();
 
             // Order
-            CreateMap<Order, OrderReadDto>();
-            CreateMap<OrderCreateDto, Order>();
+            CreateMap<Order, OrderReadDto>().ReverseMap();
+            CreateMap<OrderCreateDto, Order>().ReverseMap();
             CreateMap<OrderItem, OrderItemReadDto>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
-            CreateMap<OrderItemCreateDto, OrderItem>();
+            CreateMap<OrderItemCreateDto, OrderItem>().ReverseMap();
 
             // Complaint
             CreateMap<Complaint, ComplaintReadDto>();

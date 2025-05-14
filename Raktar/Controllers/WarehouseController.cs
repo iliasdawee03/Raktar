@@ -27,10 +27,10 @@ namespace Raktar.Controllers
             return Ok(storage);
         }
 
-        [HttpPost("assign")]
-        public async Task<IActionResult> AssignToStorage([FromBody] WarehouseStorageCreateDto dto)
+        [HttpPost("update")]
+        public async Task<IActionResult> UpsertStorageAsync([FromBody] WarehouseStorageCreateDto dto)
         {
-            var result = await _warehouseService.AssignToStorage(dto);
+            var result = await _warehouseService.UpsertStorageAsync(dto);
             return result ? NoContent() : BadRequest("Failed to assign product to storage.");
         }
     }

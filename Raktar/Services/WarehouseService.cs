@@ -10,7 +10,7 @@ namespace Raktar.Services
     public interface IWarehouseService
     {
         Task<List<WarehouseStorageReadDto>> GetAllStorageAsync();
-        Task<bool> AssignToStorage(WarehouseStorageCreateDto dto);
+        Task<bool> UpsertStorageAsync(WarehouseStorageCreateDto dto);
     }
     public class WarehouseService : IWarehouseService
     {
@@ -39,13 +39,32 @@ namespace Raktar.Services
             }).ToList();
         }
 
-        public async Task<bool> AssignToStorage(WarehouseStorageCreateDto dto)
+        public async Task<bool> UpsertStorageAsync(WarehouseStorageCreateDto dto)
         {
-            var warehouseStorage = _mapper.Map<WarehouseStorage>(dto);
-            await _context.WarehouseStorages.AddAsync(warehouseStorage);
-            await _context.SaveChangesAsync();
+            var productExists = await _context.Products.AnyAsync(p => p.Id == dto.ProductId);
+            if (!productExists)
+                return false;
 
+            if (!Enum.IsDefined(typeof(LocationCode), dto.LocationCode))
+                return false;
+
+            var storage = await _context.WarehouseStorages
+                .FirstOrDefaultAsync(ws => ws.ProductId == dto.ProductId && ws.LocationCode == dto.LocationCode);
+
+            if (storage != null)
+            {
+                storage.Quantity += dto.Quantity;
+            }
+            else
+            {
+                var warehouseStorage = _mapper.Map<WarehouseStorage>(dto);
+                await _context.WarehouseStorages.AddAsync(warehouseStorage);
+            }
+
+            await _context.SaveChangesAsync();
             return true;
         }
+
+
     }
 }

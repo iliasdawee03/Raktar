@@ -19,5 +19,12 @@ namespace Raktar.Dtos
             public LocationCode LocationCode { get; set; }
             public int Quantity { get; set; }
         }
+
+        public class WarehouseStorageUpdateDto
+        {
+            public int ProductId { get; set; }
+            public LocationCode LocationCode { get; set; }
+            public int Quantity { get; set; }
+        }
     }
 }
