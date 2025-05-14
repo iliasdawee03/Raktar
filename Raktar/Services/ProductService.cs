@@ -9,7 +9,7 @@ namespace Raktar.Services
     {
         Task<List<ProductReadDto>> GetAllAsync();
         Task<ProductReadDto?> GetByIdAsync(int id);
-        Task<ProductReadDto> CreateAsync(ProductCreateDto dto);
+        Task<ProductCreateDto> CreateAsync(ProductCreateDto dto);
         Task<bool> UpdateAsync(int id, ProductCreateDto dto);
         Task<bool> DeleteAsync(int id);
     }
