@@ -91,7 +91,6 @@ namespace Raktar.Services
             {
                 throw new UnauthorizedAccessException("Invalid credentials.");
             }
-            user.Role = UserRole.Customer;
             return await GenerateToken(user);
         }
         private async Task<string> GenerateToken(User user)
