@@ -58,8 +58,8 @@ namespace Raktar.Services
             CreateMap<DeliveryFormUpdateDto, DeliveryForm>().ReverseMap();
 
             // Transport
-            CreateMap<Transport, TransportReadDto>();
-            CreateMap<TransportCreateDto, Transport>();
+            CreateMap<Transport, TransportReadDto>().ReverseMap();
+            CreateMap<TransportCreateDto, Transport>().ReverseMap();
 
             // WarehouseStorage
             CreateMap<WarehouseStorage, WarehouseStorageReadDto>()
