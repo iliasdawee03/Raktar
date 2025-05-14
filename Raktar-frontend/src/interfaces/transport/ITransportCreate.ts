@@ -1,5 +1,5 @@
 export interface ITransportCreate {
-    CarrierId: number;
-    OrderId: number;
-    Status: string;
+    carrierId: number;
+    orderId: number;
+    status: string;
 }

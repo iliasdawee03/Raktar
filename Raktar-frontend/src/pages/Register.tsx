@@ -15,7 +15,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconAlertCircle, IconCircleCheck } from '@tabler/icons-react';
-import { IUserCreate, UserRole } from '../interfaces/user/IUserCreate';
+import { IUserCreate} from '../interfaces/user/IUserCreate';
 import api from '../api/api';
 
 
@@ -65,8 +65,7 @@ const RegisterPage = () => {
             username: values.username,
             email: values.email,
             password: values.password,
-            phoneNumber: values.phoneNumber,                         
-            role: UserRole.Customer,
+            phoneNumber: values.phoneNumber,
         };
 
         try {

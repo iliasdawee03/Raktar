@@ -5,6 +5,7 @@ export interface IOrderRead {
     customerId: number;
     placedAt: string;
     closedAt? : string;
+    carrierId? : number;
     status: string | null;
     items : IOrderItemRead[]
 }

@@ -1,7 +1,7 @@
 import { IOrderItemCreate } from "./IOrderItemCreate";
 
-export interface IOrderCreate {
-    customerId: number;
+export interface IOrderUpdate {
+    status : string;
     carrierId?: number;
     items : IOrderItemCreate[];
 }

@@ -1,5 +1,5 @@
 export interface IComplaintCreate {
-OrderId ?: number;
-UserId ?: number;
-Description ?: string;
+    OrderId ?: number;
+    UserId ?: number;
+    Description ?: string;
 }

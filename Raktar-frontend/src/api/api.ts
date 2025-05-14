@@ -12,6 +12,7 @@ import { IOrderCreate } from "../interfaces/order/IOrderCreate";
 import { IDeliveryFormRead } from "../interfaces/deliveryforms/IDeliveryFormRead";
 import { IProductRead } from "../interfaces/product/IProductRead";
 import { IProductCreate } from "../interfaces/product/IProductCreate";
+import { IOrderUpdate } from "../interfaces/order/IOrderUpdate";
 
 
 //Complain API
@@ -42,7 +43,7 @@ const Products = {
     getAll : () => axiosInstance.get<IProductRead>('/api/Products'),
     getById : (id: number) => axiosInstance.get<IProductRead>(`/api/Products/${id}`),
     create : (product: IProductCreate) => axiosInstance.post<IProductCreate>('/api/Products', product),
-    delete : (id: number) => axiosInstance.delete<boolean>(`/api/Products/${id}`),
+    delete : (id: number) => axiosInstance.delete<any>(`/api/Products/${id}`),
     update : (id: number, product: IProductCreate) => axiosInstance.put<IProductCreate>(`/api/Products/${id}`, product),
 };
 
@@ -69,7 +70,7 @@ const Orders = {
     getAll : () => axiosInstance.get<IOrderRead[]>('/api/Orders'),
     getById : (id: number) => axiosInstance.get<IOrderRead>(`/api/Orders/${id}`),
     create : (order: IOrderCreate) => axiosInstance.post<IOrderCreate>('/api/Orders', order),
-    update : (id: number, order: IOrderCreate) => axiosInstance.post<IOrderCreate>(`/api/Orders/${id}`, order),
+    update : (id: number, order: IOrderUpdate) => axiosInstance.post<IOrderUpdate>(`/api/Orders/${id}`, order),
     delete : (id: number) => axiosInstance.delete<boolean>(`/api/Orders/${id}`),
 };
 
@@ -78,7 +79,7 @@ const Transport = {
     getAll: () => axiosInstance.get<ITransportRead[]>('/api/Transports'),
     getById: (id : number) => axiosInstance.get<ITransportRead>(`/api/Transports/${id}`),
     create: (transport : ITransportCreate) => axiosInstance.post<ITransportCreate>('/api/Transports', transport),
-    updateStatus: (id: number, status: string) => axiosInstance.put<boolean>(`/api/Transports/${id}`, { status }),
+    updateStatus: (id: number, status: string) => axiosInstance.put<any>(`/api/Transports/${id}`, { status }),
 };
 
 //Exporting all API functions

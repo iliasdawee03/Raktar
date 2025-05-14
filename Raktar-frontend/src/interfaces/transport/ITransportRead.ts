@@ -3,6 +3,6 @@ export interface ITransportRead {
     CarrierId: number;
     OrderId: number;
     Status: string;
-    StartDate: Date;
-    EndDate: Date;  
+    StartDate?: Date;
+    EndDate?: Date;  
 }
