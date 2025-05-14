@@ -54,7 +54,8 @@ namespace Raktar.Services
             CreateMap<DeliveryFormCreateDto, DeliveryForm>().ReverseMap();
             CreateMap<DeliveredProduct, DeliveredProductReadDto>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
-            CreateMap<DeliveredProductCreateDto, DeliveredProduct>().ReverseMap(); ;
+            CreateMap<DeliveredProductCreateDto, DeliveredProduct>().ReverseMap();
+            CreateMap<DeliveryFormUpdateDto, DeliveryForm>();
 
             // Transport
             CreateMap<Transport, TransportReadDto>();

@@ -41,5 +41,14 @@ namespace Raktar.Controllers
             var createdForm = await _deliveryFormService.CreateAsync(dto);
             return Ok(createdForm);
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<DeliveryFormUpdateDto>> Update(int id, DeliveryFormUpdateDto dto)
+        {
+            var updated = await _deliveryFormService.UpdateAsync(id, dto);
+            if (updated == null)
+                return NotFound();
+            return Ok(updated);
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace Raktar.Services
         Task<List<DeliveryFormReadDto>> GetAllAsync();
         Task<DeliveryFormReadDto?> GetByIdAsync(int id);
         Task<DeliveryFormCreateDto> CreateAsync(DeliveryFormCreateDto dto);
+        Task<DeliveryFormUpdateDto?> UpdateAsync(int id, DeliveryFormUpdateDto dto);
     }
     public class DeliveryFormService : IDeliveryFormService
     {
@@ -52,6 +53,16 @@ namespace Raktar.Services
             await _context.DeliveryForms.AddAsync(form);
             await _context.SaveChangesAsync();
             return _mapper.Map<DeliveryFormCreateDto>(form);
+        }
+        public async Task<DeliveryFormUpdateDto?> UpdateAsync(int id, DeliveryFormUpdateDto dto)
+        {
+            var form = await _context.DeliveryForms.FirstOrDefaultAsync(f => f.Id == id);
+            if (form == null)
+                return null;
+            if (!string.IsNullOrEmpty(dto.Status))
+                form.Status = dto.Status;
+            await _context.SaveChangesAsync();
+            return _mapper.Map<DeliveryFormUpdateDto>(form);
         }
     }
 }
