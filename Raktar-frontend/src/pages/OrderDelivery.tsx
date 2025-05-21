@@ -40,7 +40,7 @@ const OrderDelivery = () => {
   }, [email, navigate]);
 
   useEffect(() => {
-    const fetchTransports = async () => {
+     const fetchTransports = async () => {
       if (!userId) {
         setLoading(false);
         return;
@@ -48,12 +48,14 @@ const OrderDelivery = () => {
       setLoading(true);
       try {
         const response = await api.Transport.getAll();
+        console.log("Transports API response:", response.data);
         if (Array.isArray(response.data)) {
           const userTransports = response.data.filter(
             (transport) => 
               transport.carrierId === userId && 
               transport.status !== "Closed"
           );
+          console.log("Filtered transports:", userTransports);
           setTransports(userTransports);
         } else {
           setTransports([]);
@@ -82,17 +84,14 @@ const OrderDelivery = () => {
         transports
           .filter((t) => selected.includes(t.id))
           .map(async (t) => {
-            // 1. Order update (status: "Closed")
             await api.Orders.update(t.orderId, {
-              status: "Closed",
-              items: [], // Ha kötelező, töltsd ki a rendelés tételeivel!
+              Status: "Closed",
+              Items: [],
             });
-            // 2. Transport status update with current date
             await api.Transport.updateStatus(t.id, "Closed", new Date());
           })
       );
       alert("Szállítások lezárva!");
-      // Frissítés
       setTransports((prev) =>
         prev.map((t) =>
           selected.includes(t.id) ? { ...t, status: "Closed", endDate: new Date() } : t
@@ -111,17 +110,16 @@ const OrderDelivery = () => {
         transports
           .filter((t) => selected.includes(t.id))
           .map(async (t) => {
-            // 1. Order update (status: "In Transit")
+
             await api.Orders.update(t.orderId, {
-              status: "In Transit",
-              items: [], // Ha kötelező, töltsd ki a rendelés tételeivel!
+              Status: "In Transit",
+              ...(userId !== null ? { CarrierId: userId } : {}),
+              Items: [], 
             });
-            // 2. Transport status update
             await api.Transport.updateStatus(t.id, "In Transit");
           })
       );
       alert("Státusz frissítve!");
-      // Frissítés
       setTransports((prev) =>
         prev.map((t) =>
           selected.includes(t.id) ? { ...t, status: "In Transit" } : t

@@ -74,7 +74,7 @@ export function NavbarMinimal({toggle}: { toggle: () => void }) {
         {
             icon : IconBorderAll,
             label : "Raktár fuvar",
-            url : "/dashboard/warehouse",
+            url : "/dashboard/warehousedelivery",
             roles : ['Carrier', 'Admin'],
         },
         {

@@ -14,7 +14,7 @@ import OrderDelivery from "../pages/OrderDelivery.tsx";
 import WarehouseForm from "../pages/WarehouseForm.tsx";
 import StorageView from "../pages/StorageView.tsx";
 import CarrierAssign from "../pages/CarrierAssign.tsx";
-import AllComplaints from "../pages/allComplaints.tsx";
+import AllComplaints from "../pages/AllComplaints.tsx";
 
 export const routes = [
     {
@@ -30,7 +30,7 @@ export const routes = [
         title: "Kezdőlap",
         children: [
             {
-                path : "complaints",
+                path : "complaint",
                 component : <Complaint/>,
                 isPrivate : true,
                 title : "Visszajelzés",
@@ -75,7 +75,7 @@ export const routes = [
                 path:"warehousedelivery",
                 component : <WarehouseStorage/>,
                 isPrivate : true,
-                title : "Raktár",
+                title : "Raktár fuvar",
             },
             {
                 path:"orderdelivery",

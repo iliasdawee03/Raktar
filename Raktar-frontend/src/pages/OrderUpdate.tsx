@@ -11,8 +11,8 @@ import {
     Text
 } from '@mantine/core';
 import { IOrderRead } from '../interfaces/order/IOrderRead';
-import { IOrderCreate } from '../interfaces/order/IOrderCreate';
 import api from '../api/api';
+import { IOrderUpdate } from '../interfaces/order/IOrderUpdate';
 
 const OrderUpdate = () => {
     const location = useLocation();
@@ -23,9 +23,9 @@ const OrderUpdate = () => {
 
     // Check if the selected order is valid -- DELETE THIS LATER
     useEffect(() => {
-        if (selectedOrder?.items) {
-            const initialQuantities = selectedOrder.items.reduce((acc, item) => {
-                acc[item.productId] = item.quantity;
+        if (selectedOrder?.Items) {
+            const initialQuantities = selectedOrder.Items.reduce((acc, item) => {
+                acc[item.ProductId] = item.Quantity;
                 return acc;
             }, {} as {[key: number]: number});
             setQuantities(initialQuantities);
@@ -47,15 +47,16 @@ const OrderUpdate = () => {
     const handleSubmit = async () => {
         try {
             setLoading(true);
-            const updateOrderData: IOrderCreate = {
-                customerId: selectedOrder.customerId,
-                items: selectedOrder.items.map(item => ({
-                    productId: item.productId,
-                    quantity: quantities[item.productId]
+            const updateOrderData = {
+                CustomerId: selectedOrder.CustomerId,
+                Status : selectedOrder.Status,
+                Items: selectedOrder.Items.map(item => ({
+                    ProductId: item.ProductId,
+                    Quantity: quantities[item.ProductId]
                 }))
-            };
+            } as IOrderUpdate;
 
-            await api.Orders.update(selectedOrder.id, updateOrderData);
+            await api.Orders.update(selectedOrder.Id, updateOrderData);
             alert('Rendelés sikeresen frissítve!');
             navigate('/dashboard/profile');
         } catch (error: any) { 
@@ -114,13 +115,13 @@ const OrderUpdate = () => {
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                        {selectedOrder.items.map((item) => (
-                            <Table.Tr key={item.productId}>
-                                <Table.Td>{item.productName}</Table.Td>
+                        {selectedOrder.Items.map((item) => (
+                            <Table.Tr key={item.ProductId}>
+                                <Table.Td>{item.ProductName}</Table.Td>
                                 <Table.Td>
                                     <NumberInput
-                                        value={quantities[item.productId]}
-                                        onChange={(value) => handleQuantityChange(item.productId, Number(value))}
+                                        value={quantities[item.ProductId]}
+                                        onChange={(value) => handleQuantityChange(item.ProductId, Number(value))}
                                         min={1}
                                         max={999}
                                         stepHoldDelay={500}

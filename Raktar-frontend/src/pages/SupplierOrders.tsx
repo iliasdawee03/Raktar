@@ -27,13 +27,12 @@ const SupplierOrders = () => {
             setError(null);
             const response = await api.Orders.getAll();
             const fetchedOrders: IOrderRead[] = Array.isArray(response.data) ? response.data : [];
-            // Csak a "Pending" státuszú rendelések
-            const pendingOrders = fetchedOrders.filter(order => order.status === "Pending");
+            const pendingOrders = fetchedOrders.filter(order => order.Status === "Pending" || order.Status === "Open");
             setOrders(pendingOrders);
 
             const itemsFromAllOrders: IOrderItemRead[] = pendingOrders.reduce((acc, currentOrder) => {
-                if (currentOrder.items && Array.isArray(currentOrder.items)) {
-                    return acc.concat(currentOrder.items);
+                if (currentOrder.Items && Array.isArray(currentOrder.Items)) {
+                    return acc.concat(currentOrder.Items);
                 }
                 return acc;
             }, [] as IOrderItemRead[]);
@@ -41,19 +40,19 @@ const SupplierOrders = () => {
             setAllOrderItems(itemsFromAllOrders);
 
             const summarized = itemsFromAllOrders.reduce((acc, item) => {
-                if (item.productId === undefined || item.quantity === undefined) {
-                    console.warn("Skipping item due to missing productId or quantity:", item);
+                if (item.ProductId === undefined || item.Quantity === undefined) {
+                    console.warn("Skipping item due to missing ProductId or Quantity:", item);
                     return acc;
                 }
 
-                const existingItem = acc.get(item.productId);
+                const existingItem = acc.get(item.ProductId);
                 if (existingItem) {
-                    existingItem.totalQuantity += item.quantity;
+                    existingItem.totalQuantity += item.Quantity;
                 } else {
-                    acc.set(item.productId, {
-                        productId: item.productId,
-                        productName: item.productName || `Termék ID: ${item.productId}`,
-                        totalQuantity: item.quantity,
+                    acc.set(item.ProductId, {
+                        productId: item.ProductId,
+                        productName: item.ProductName || `Termék ID: ${item.ProductId}`,
+                        totalQuantity: item.Quantity,
                     });
                 }
                 return acc;
@@ -83,7 +82,7 @@ const SupplierOrders = () => {
     try {
         await Promise.all(
             orders.map(order =>
-                api.Orders.update(order.id, { ...order, status: "At supplier" })
+                api.Orders.update(order.Id, { ...order, Status  : "At supplier" })
             )
         );
         navigate("/dashboard/supplierdeliveryform", {

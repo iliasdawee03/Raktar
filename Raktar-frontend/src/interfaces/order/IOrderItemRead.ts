@@ -1,5 +1,5 @@
 export interface IOrderItemRead {
-    productId: number;
-    productName: string;
-    quantity: number;
+    ProductId: number;
+    ProductName: string;
+    Quantity: number;
 }
