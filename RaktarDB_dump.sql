@@ -1,114 +1,90 @@
-use RaktarDB
 
-INSERT INTO dbo.Users(Name, Email, Phone, PasswordHash, Role) VALUES
-('Alice Smith', 'alice@example.com', '1234567890', 'hashed_pw_1', 0),
-('Bob Johnson', 'bob@example.com', '1234567891', 'hashed_pw_2', 1),
-('Carol White', 'carol@example.com', '1234567892', 'hashed_pw_3', 2),
-('David Brown', 'david@example.com', '1234567893', 'hashed_pw_4', 3),
-('Eva Green', 'eva@example.com', '1234567894', 'hashed_pw_5', 0),
-('Frank Black', 'frank@example.com', '1234567895', 'hashed_pw_6', 1),
-('Grace Blue', 'grace@example.com', '1234567896', 'hashed_pw_7', 2),
-('Henry Red', 'henry@example.com', '1234567897', 'hashed_pw_8', 3),
-('Isla Yellow', 'isla@example.com', '1234567898', 'hashed_pw_9', 0),
-('Jack Pink', 'jack@example.com', '1234567899', 'hashed_pw_10', 2);
+-- User
+SET IDENTITY_INSERT Users ON; 
+INSERT INTO [Users] (Id, Name, Email, Phone, PasswordHash, Role) VALUES
+(1, 'Alice Kovács', 'alice@example.com', 361234567, 'hash1', 0),
+(2, 'Bob Szabó', 'bob@example.com', 362345678, 'hash2', 1),
+(3, 'Carol Kiss', 'carol@example.com', 363456789, 'hash3', 2),
+(4, 'David Tóth', 'david@example.com', 364567890, 'hash4', 3),
+(5, 'Erika Varga', 'erika@example.com', 365678901, 'hash5', 4);
+SET IDENTITY_INSERT Users OFF; 
 
-INSERT INTO dbo.Products (Name, Description, SKU, Price) VALUES
-('Widget A', 'Basic widget', 'SKU001', 10.50),
-('Widget B', 'Advanced widget', 'SKU002', 15.75),
-('Widget C', 'Premium widget', 'SKU003', 20.00),
-('Gadget A', 'Small gadget', 'SKU004', 5.25),
-('Gadget B', 'Medium gadget', 'SKU005', 7.80),
-('Gadget C', 'Large gadget', 'SKU006', 9.99),
-('Tool A', 'Screwdriver', 'SKU007', 3.30),
-('Tool B', 'Hammer', 'SKU008', 6.60),
-('Tool C', 'Wrench', 'SKU009', 8.80),
-('Tool D', 'Drill', 'SKU010', 45.00);
+-- Product
+SET IDENTITY_INSERT Products ON;
+INSERT INTO Products (Id, Name, Description, BarCode, Price) VALUES
+(1, 'Laptop', '14" ultrabook', '1234567890123', 249999.99),
+(2, 'Egér', 'Vezeték nélküli', '2345678901234', 5999.00),
+(3, 'Billentyûzet', 'Mechanikus', '3456789012345', 19999.00),
+(4, 'Monitor', '27" IPS', '4567890123456', 79999.50),
+(5, 'USB-C Kábel', '1m hosszú', '5678901234567', 2990.00);
+SET IDENTITY_INSERT Products OFF;
 
-INSERT INTO dbo.Orders (CustomerId, PlacedAt, ClosedAt, Status) VALUES
-(1, '2025-04-01', NULL, 'Open'),
-(5, '2025-04-01', '2025-04-02', 'Closed'),
-(9, '2025-03-28', NULL, 'In Transit'),
-(1, '2025-03-30', NULL, 'Open'),
-(5, '2025-03-25', '2025-03-27', 'Closed'),
-(9, '2025-03-20', NULL, 'Open'),
-(1, '2025-03-18', NULL, 'Open'),
-(5, '2025-03-15', NULL, 'In Transit'),
-(9, '2025-03-10', '2025-03-12', 'Closed'),
-(1, '2025-03-05', NULL, 'Open');
+-- Order
+SET IDENTITY_INSERT Orders ON;
+INSERT INTO [Orders] (Id, CustomerId, PlacedAt, ClosedAt, Status) VALUES
+(1, 1, '2025-05-01', NULL, 'Open'),
+(2, 1, '2025-04-20', '2025-04-22', 'Closed'),
+(3, 2, '2025-04-25', NULL, 'In Transit'),
+(4, 3, '2025-04-15', '2025-04-18', 'Closed'),
+(5, 2, '2025-05-02', NULL, 'Open');
+SET IDENTITY_INSERT Orders OFF;
 
-INSERT INTO dbo.OrderItems (OrderId, ProductId, Quantity) VALUES
-(1, 1, 5),
-(1, 3, 2),
-(2, 4, 10),
-(3, 2, 7),
-(4, 5, 1),
-(5, 6, 3),
-(6, 7, 4),
-(7, 8, 8),
-(8, 9, 6),
-(10, 10, 2);
+-- OrderItem
+SET IDENTITY_INSERT OrderItems ON;
+INSERT INTO OrderItems(Id, OrderId, ProductId, Quantity) VALUES
+(1, 1, 1, 1),
+(2, 1, 2, 2),
+(3, 2, 3, 1),
+(4, 3, 4, 2),
+(5, 4, 5, 5);
+SET IDENTITY_INSERT OrderItems OFF;
 
-INSERT INTO dbo.WarehouseStorages (ProductId, LocationCode, Quantity) VALUES
-(1, 'A1-01', 100),
-(2, 'A1-02', 200),
-(3, 'A2-01', 150),
-(4, 'A2-02', 50),
-(5, 'B1-01', 300),
-(6, 'B1-02', 120),
-(7, 'B2-01', 75),
-(8, 'B2-02', 60),
-(9, 'C1-01', 90),
-(10, 'C1-02', 40);
+-- Complaint
+SET IDENTITY_INSERT Complaints ON;
+INSERT INTO Complaints(Id, OrderId, UserId, Description, Status, CreatedAt) VALUES
+(1, 1, 1, 'Hiányzó kábel', 'New', '2025-05-02'),
+(2, 2, 1, 'Sérült csomagolás', 'Resolved', '2025-04-23'),
+(3, 3, 2, 'Késõi szállítás', 'Processing', '2025-04-30'),
+(4, 4, 3, 'Rossz termék', 'Resolved', '2025-04-19'),
+(5, 5, 2, 'Nem kaptam számlát', 'New', '2025-05-03');
+SET IDENTITY_INSERT Complaints OFF;
 
-INSERT INTO dbo.DeliveryForms (SupplierId, ExpectedDeliveryDate, Status) VALUES
-(2, '2025-04-06', 'Filled'),
-(6, '2025-04-07', 'Processed'),
-(2, '2025-04-01', 'Filled'),
-(6, '2025-03-31', 'Processed'),
-(2, '2025-03-29', 'Filled'),
-(6, '2025-03-28', 'Filled'),
-(2, '2025-03-27', 'Processed'),
-(6, '2025-03-26', 'Filled'),
-(2, '2025-03-25', 'Processed'),
-(6, '2025-03-24', 'Filled');
+-- WarehouseStorage
+SET IDENTITY_INSERT WarehouseStorages ON;
+INSERT INTO WarehouseStorages (Id, ProductId, LocationCode, Quantity) VALUES
+(1, 1, 1, 10),
+(2, 2, 2, 50),
+(3, 3, 3, 20),
+(4, 4, 4, 15),
+(5, 5, 5, 100);
+SET IDENTITY_INSERT WarehouseStorages OFF;
 
-INSERT INTO dbo.DeliveredProducts (DeliveryFormId, ProductId, Quantity) VALUES
-(1, 1, 50),
-(1, 2, 30),
-(2, 3, 40),
-(3, 4, 20),
-(4, 5, 60),
-(5, 6, 35),
-(6, 7, 25),
-(7, 8, 45),
-(8, 9, 55),
-(9, 10, 65);
+-- DeliveryForm
+SET IDENTITY_INSERT DeliveryForms ON;
+INSERT INTO DeliveryForms (Id, SupplierId, ExpectedDeliveryDate, CreatedAt, Status) VALUES
+(1, 2, '2025-05-05', '2025-05-01', 'Filled'),
+(2, 2, '2025-05-10', '2025-05-02', 'Processed'),
+(3, 2, '2025-05-08', '2025-05-01', 'Filled'),
+(4, 2, '2025-05-03', '2025-04-30', 'Processed'),
+(5, 2, '2025-05-07', '2025-05-02', 'Filled');
+SET IDENTITY_INSERT DeliveryForms OFF;
 
-INSERT INTO dbo.Transports (CarrierId, OrderId, Status, StartDate, EndDate) VALUES
-(3, 2, 'Delivered', '2025-04-01', '2025-04-02'),
-(7, 3, 'In Transit', '2025-04-02', NULL),
-(3, 5, 'Delivered', '2025-03-25', '2025-03-27'),
-(7, 8, 'In Transit', '2025-03-15', NULL),
-(3, 9, 'Delivered', '2025-03-10', '2025-03-12'),
-(7, 4, 'Ready', NULL, NULL),
-(3, 6, 'Ready', NULL, NULL),
-(7, 7, 'Ready', NULL, NULL),
-(3, 10, 'Ready', NULL, NULL),
-(7, 1, 'Ready', NULL, NULL);
+-- DeliveredProduct
+SET IDENTITY_INSERT DeliveredProducts ON;
+INSERT INTO DeliveredProducts (Id, DeliveryFormId, ProductId, Quantity) VALUES
+(1, 1, 1, 5),
+(2, 1, 2, 10),
+(3, 2, 3, 7),
+(4, 3, 4, 3),
+(5, 4, 5, 20);
+SET IDENTITY_INSERT DeliveredProducts OFF;
 
-INSERT INTO dbo.Complaints (OrderId, UserId, Description, Status, CreatedAt) VALUES
-(2, 1, 'Wrong item delivered', 'New', '2025-04-03'),
-(3, 5, 'Late delivery', 'Processing', '2025-04-04'),
-(5, 9, 'Damaged product', 'Resolved', '2025-04-01'),
-(6, 1, 'Missing item', 'New', '2025-04-02'),
-(8, 5, 'Packaging issue', 'Processing', '2025-03-29'),
-(9, 9, 'Incorrect quantity', 'New', '2025-03-28'),
-(4, 1, 'Item not as described', 'Resolved', '2025-03-30'),
-(1, 5, 'Unclear invoice', 'New', '2025-03-27'),
-(10, 9, 'Wrong address', 'Processing', '2025-03-26'),
-(7, 1, 'Late shipment', 'Resolved', '2025-03-25');
-
-
-
-
-
+-- Transport
+SET IDENTITY_INSERT Transports ON;
+INSERT INTO Transports (Id, CarrierId, OrderId, Status, StartDate, EndDate) VALUES
+(1, 3, 1, 'Ready', '2025-05-02', NULL),
+(2, 3, 2, 'Delivered', '2025-04-20', '2025-04-22'),
+(3, 3, 3, 'In Transit', '2025-04-30', NULL),
+(4, 3, 4, 'Delivered', '2025-04-16', '2025-04-18'),
+(5, 3, 5, 'Ready', '2025-05-03', NULL);
+SET IDENTITY_INSERT Transports OFF;
