@@ -20,5 +20,10 @@ namespace Raktar.Dtos
             public DateTime ExpectedDeliveryDate { get; set; }
             public List<DeliveredProductCreateDto> DeliveredProducts { get; set; }
         }
+
+        public class DeliveryFormUpdateDto
+        {
+            public string Status { get; set; }
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace Raktar.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "Customer")]
+    [Authorize(Roles = "Customer,Admin")]
     public class ComplaintsController : ControllerBase
     {
         private readonly IComplaintService _complaintService;
@@ -37,10 +37,10 @@ namespace Raktar.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ComplaintReadDto>> Create(ComplaintCreateDto dto)
+        public async Task<ActionResult<ComplaintCreateDto>> Create(ComplaintCreateDto dto)
         {
             var createdComplaint = await _complaintService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = createdComplaint.Id }, createdComplaint);
+            return Ok(createdComplaint);
         }
 
         [HttpDelete("{id}")]

@@ -38,31 +38,33 @@ namespace Raktar.Services
             CreateMap<ProductCreateDto, Product>();
 
             // Order
-            CreateMap<Order, OrderReadDto>();
-            CreateMap<OrderCreateDto, Order>();
+            CreateMap<Order, OrderReadDto>().ReverseMap();
+            CreateMap<OrderCreateDto, Order>().ReverseMap();
             CreateMap<OrderItem, OrderItemReadDto>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
-            CreateMap<OrderItemCreateDto, OrderItem>();
+            CreateMap<OrderItemCreateDto, OrderItem>().ReverseMap();
 
             // Complaint
             CreateMap<Complaint, ComplaintReadDto>();
             CreateMap<ComplaintCreateDto, Complaint>();
+            CreateMap<Complaint, ComplaintCreateDto>();
 
             // DeliveryForm
             CreateMap<DeliveryForm, DeliveryFormReadDto>();
-            CreateMap<DeliveryFormCreateDto, DeliveryForm>();
+            CreateMap<DeliveryFormCreateDto, DeliveryForm>().ReverseMap();
             CreateMap<DeliveredProduct, DeliveredProductReadDto>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
-            CreateMap<DeliveredProductCreateDto, DeliveredProduct>();
+            CreateMap<DeliveredProductCreateDto, DeliveredProduct>().ReverseMap();
+            CreateMap<DeliveryFormUpdateDto, DeliveryForm>().ReverseMap();
 
             // Transport
-            CreateMap<Transport, TransportReadDto>();
-            CreateMap<TransportCreateDto, Transport>();
+            CreateMap<Transport, TransportReadDto>().ReverseMap();
+            CreateMap<TransportCreateDto, Transport>().ReverseMap();
 
             // WarehouseStorage
             CreateMap<WarehouseStorage, WarehouseStorageReadDto>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
-            CreateMap<WarehouseStorageCreateDto, WarehouseStorage>();
+            CreateMap<WarehouseStorageCreateDto, WarehouseStorage>().ReverseMap();
         }
     }
 }

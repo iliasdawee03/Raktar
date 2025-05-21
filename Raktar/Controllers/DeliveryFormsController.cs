@@ -9,7 +9,7 @@ namespace Raktar.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "Supplier")]
+    [Authorize(Roles = "Supplier,Admin,WarehouseStaff")]
     public class DeliveryFormsController : ControllerBase
     {
         private readonly IDeliveryFormService _deliveryFormService;
@@ -36,10 +36,19 @@ namespace Raktar.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<DeliveryFormReadDto>> Create(DeliveryFormCreateDto dto)
+        public async Task<ActionResult<DeliveryFormCreateDto>> Create(DeliveryFormCreateDto dto)
         {
             var createdForm = await _deliveryFormService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = createdForm.Id }, createdForm);
+            return Ok(createdForm);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<DeliveryFormUpdateDto>> Update(int id, DeliveryFormUpdateDto dto)
+        {
+            var updated = await _deliveryFormService.UpdateAsync(id, dto);
+            if (updated == null)
+                return NotFound();
+            return Ok(updated);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Raktar.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Customer")]
+    [Authorize(Roles = "Customer,Admin,Supplier,WarehouseStaff, Carrier")]
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;
@@ -32,14 +32,14 @@ namespace Raktar.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<OrderReadDto>> Create(OrderCreateDto dto)
+        public async Task<ActionResult<OrderCreateDto>> Create(OrderCreateDto dto)
         {
             var order = await _orderService.CreateOrderAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = order.Id }, order);
+            return Ok(dto);
         }
 
         [HttpPost("{id}")]
-        public async Task<IActionResult> Update(int id, OrderCreateDto dto)
+        public async Task<IActionResult> Update(int id, OrderUpdateDto dto)
         {
             var result = await _orderService.UpdateOrderAsync(id, dto);
             return result ? NoContent() : NotFound();

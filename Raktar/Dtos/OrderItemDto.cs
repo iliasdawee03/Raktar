@@ -5,7 +5,7 @@
         public class OrderItemReadDto
         {
             public int ProductId { get; set; }
-            public string ProductName { get; set; } // optional for easier reading
+            public string ProductName { get; set; }
             public int Quantity { get; set; }
         }
 
