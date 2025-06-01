@@ -5,11 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { Container, Loader, Title, Text, Table, Button, Group } from "@mantine/core";
 import { IOrderItemRead } from "../interfaces/order/IOrderItemRead";
 
-//interface for summarized order items
 export interface ISummarizedOrderItem {
-    productId: number;
-    productName: string;
-    totalQuantity: number;
+    productid: number;
+    productname: string;
+    totalquantity: number;
 }
 
 const SupplierOrders = () => {
@@ -26,13 +25,14 @@ const SupplierOrders = () => {
             setLoading(true);
             setError(null);
             const response = await api.Orders.getAll();
+            console.log ("Fetched Orders:", response.data);
             const fetchedOrders: IOrderRead[] = Array.isArray(response.data) ? response.data : [];
-            const pendingOrders = fetchedOrders.filter(order => order.Status === "Pending" || order.Status === "Open");
+            const pendingOrders = fetchedOrders.filter(order => order.status === "Pending" || order.status === "Open");
             setOrders(pendingOrders);
 
             const itemsFromAllOrders: IOrderItemRead[] = pendingOrders.reduce((acc, currentOrder) => {
-                if (currentOrder.Items && Array.isArray(currentOrder.Items)) {
-                    return acc.concat(currentOrder.Items);
+                if (currentOrder.items && Array.isArray(currentOrder.items)) {
+                    return acc.concat(currentOrder.items);
                 }
                 return acc;
             }, [] as IOrderItemRead[]);
@@ -40,19 +40,19 @@ const SupplierOrders = () => {
             setAllOrderItems(itemsFromAllOrders);
 
             const summarized = itemsFromAllOrders.reduce((acc, item) => {
-                if (item.ProductId === undefined || item.Quantity === undefined) {
-                    console.warn("Skipping item due to missing ProductId or Quantity:", item);
+                if (item.productId === undefined || item.quantity === undefined) {
+                    console.warn("Skipping item due to missing productId or quantity:", item);
                     return acc;
                 }
 
-                const existingItem = acc.get(item.ProductId);
+                const existingItem = acc.get(item.productId);
                 if (existingItem) {
-                    existingItem.totalQuantity += item.Quantity;
+                    existingItem.totalquantity += item.quantity;
                 } else {
-                    acc.set(item.ProductId, {
-                        productId: item.ProductId,
-                        productName: item.ProductName || `Termék ID: ${item.ProductId}`,
-                        totalQuantity: item.Quantity,
+                    acc.set(item.productId, {
+                        productid: item.productId,
+                        productname: item.productName || `Termék ID: ${item.productId}`,
+                        totalquantity: item.quantity,
                     });
                 }
                 return acc;
@@ -82,7 +82,7 @@ const SupplierOrders = () => {
     try {
         await Promise.all(
             orders.map(order =>
-                api.Orders.update(order.Id, { ...order, Status  : "At supplier" })
+                api.Orders.update(order.id, { ...order, status: "At supplier" })
             )
         );
         navigate("/dashboard/supplierdeliveryform", {
@@ -120,17 +120,15 @@ const SupplierOrders = () => {
                     <Table striped highlightOnHover withTableBorder withColumnBorders>
                         <Table.Thead>
                             <Table.Tr>
-                                <Table.Th>Termék ID</Table.Th>
                                 <Table.Th>Termék Név</Table.Th>
                                 <Table.Th>Összes Mennyiség</Table.Th>
                             </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
                             {summarizedItems.map((item) => (
-                                <Table.Tr key={item.productId}>
-                                    <Table.Td>{item.productId}</Table.Td>
-                                    <Table.Td>{item.productName}</Table.Td>
-                                    <Table.Td>{item.totalQuantity}</Table.Td>
+                                <Table.Tr key={item.productid}>
+                                    <Table.Td>{item.productname}</Table.Td>
+                                    <Table.Td>{item.totalquantity}</Table.Td>
                                 </Table.Tr>
                             ))}
                         </Table.Tbody>

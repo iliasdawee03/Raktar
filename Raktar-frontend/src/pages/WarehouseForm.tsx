@@ -57,9 +57,9 @@ const WarehouseStorage = () => {
                 const locationCode = locationCodeMap[product.productId];
                 if (locationCode) {
                     warehouseItems.push({
-                        ProductId: product.productId,
-                        Quantity: product.quantity,
-                        LocationCode: LocationCode[locationCode],
+                        productId: product.productId,
+                        quantity: product.quantity,
+                        locationCode: LocationCode[locationCode],
                     });
                 }
             });

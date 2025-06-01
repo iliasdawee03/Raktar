@@ -1,4 +1,4 @@
 export interface IOrderItemCreate {
-    ProductId: number;
-    Quantity: number;
+    productId: number;
+    quantity: number;
 }

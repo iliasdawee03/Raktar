@@ -1,7 +1,7 @@
 export interface IWarehouseStorageCreate {
-    ProductId: number;
-    Quantity: number;
-    LocationCode : LocationCode;
+    productId: number;
+    quantity: number;
+    locationCode: LocationCode;
 }
 export enum LocationCode {
     E1,
