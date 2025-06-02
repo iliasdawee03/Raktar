@@ -43,8 +43,8 @@ const Profile = () => {
 
     const updateValidation = (order : IOrderRead) => {
         const currentDate = new Date();
-        const closedDate = new Date(String(order.ClosedAt));
-        if(closedDate && closedDate > currentDate)
+        const closedDate = new Date(String(order.closedAt));
+        if(closedDate && closedDate > currentDate && order.status ==  "Open" || order.status == "Pending")
         {
             navigate('/dashboard/orderupdate', {
                 state: { selectedOrder: order }
@@ -141,7 +141,7 @@ const initialFormValues = useMemo(() => ({
                     const ordersResponse = await api.Orders.getAll();
                     console.log("Orders response:", ordersResponse.data);
                     const userOrders = ordersResponse.data
-                        .filter((order: IOrderRead) => order.CustomerId === user.id);
+                        .filter((order: IOrderRead) => order.customerId === user.id);
                     console.log("Szűrt rendelések:", userOrders);
                     setOrders(userOrders);
                     }
@@ -277,15 +277,15 @@ const initialFormValues = useMemo(() => ({
                         </Table.Thead>
                         <Table.Tbody>
                         {orders.map((order) => (
-                    <Table.Tr key={order.Id}>
-                        <Table.Td>{order.Id}</Table.Td>
-                            <Table.Td>{order.PlacedAt ? formatDate(order.PlacedAt) : "-"}</Table.Td>
-                            <Table.Td>{order.ClosedAt ? formatDate(order.ClosedAt) : '-'}</Table.Td>
+                    <Table.Tr key={order.id}>
+                        <Table.Td>{order.id}</Table.Td>
+                            <Table.Td>{order.placedAt ? formatDate(order.placedAt) : "-"}</Table.Td>
+                            <Table.Td>{order.closedAt ? formatDate(order.closedAt) : '-'}</Table.Td>
                         <Table.Td>
                             <ul style={{ margin: 0, paddingLeft: '20px' }}>
-                                {order.Items.map((item, index) => (
+                                {order.items.map((item, index) => (
                                     <li key={index}>
-                                        {item.ProductName} ({item.Quantity} db)
+                                        {item.productName} ({item.quantity} db)
                                     </li>
                                 ))}
                             </ul>
@@ -293,14 +293,14 @@ const initialFormValues = useMemo(() => ({
                         <Table.Td>
                         <Badge
                             color={
-                                !order.Status || order.Status === 'null' ? 'yellow' :
-                                order.Status === 'Closed' ? 'red' :
+                                !order.status || order.status === 'null' ? 'yellow' :
+                                order.status === 'Closed' ? 'red' :
                                 'green'
                             }
                         >
-                            {!order.Status || order.Status === 'null' ? 'pending' :
-                            order.Status === 'Closed' ? 'closed' :
-                            order.Status}
+                            {!order.status || order.status === 'null' ? 'pending' :
+                            order.status === 'Closed' ? 'closed' :
+                            order.status}
                         </Badge>
                     </Table.Td>
                         <Table.Td>

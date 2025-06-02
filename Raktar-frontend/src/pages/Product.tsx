@@ -40,10 +40,10 @@ const Product = () => {
         if (stateFromOrderPage?.currentOrderState && products.length > 0) {
             const newSelectedItems = new Map<number, { quantity: number; product: IProductRead }>();
             stateFromOrderPage.currentOrderState.forEach(itemFromState => {
-                const productDetails = products.find(p => p.id === itemFromState.ProductId);
+                const productDetails = products.find(p => p.id === itemFromState.productId);
                 if (productDetails) {
-                    newSelectedItems.set(itemFromState.ProductId, {
-                        quantity: itemFromState.Quantity,
+                    newSelectedItems.set(itemFromState.productId, {
+                        quantity: itemFromState.quantity,
                         product: productDetails
                     });
                 }
@@ -92,12 +92,9 @@ const Product = () => {
         selectedOrderItems.forEach((value) => { 
             if (value.quantity > 0) {
                 orderItemsToPass.push({
-                    ProductId: value.product.id,    
-                    Quantity: value.quantity,
-                    // Ha az IOrderItemCreate interfész csak productId-t és quantity-t tartalmaz,
-                    // akkor a productName és unitPrice itt nem adható át.
-                    // productName: value.product.name, 
-                    // unitPrice: value.product.price    
+                 // Ezt a mezőt eltávolíthatod, ha nem szükséges
+                    productId: value.product.id,
+                    quantity: value.quantity,
                 });
             }
         });

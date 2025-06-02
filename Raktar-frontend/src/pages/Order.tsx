@@ -66,8 +66,8 @@ const Order = () => {
 
         try {
             const orderCreatePayload: IOrderCreate = {
-                CustomerId: userId,
-                Items: orderItems, 
+                customerId: userId,
+                items: orderItems, 
             };
 
             const response = await api.Orders.create(orderCreatePayload);
@@ -110,9 +110,9 @@ const Order = () => {
                         </Table.Thead>
                         <Table.Tbody>
                             {orderItems.map((item, index) => (
-                                <Table.Tr key={`${item.ProductId}-${index}`}> 
-                                    <Table.Td>{item.ProductId}</Table.Td>
-                                    <Table.Td>{item.Quantity} db</Table.Td>
+                                <Table.Tr key={`${item.productId}-${index}`}> 
+                                    <Table.Td>{item.productId}</Table.Td>
+                                    <Table.Td>{item.quantity} db</Table.Td>
                                 </Table.Tr>
                             ))}
                         </Table.Tbody>

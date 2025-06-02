@@ -23,9 +23,9 @@ const OrderUpdate = () => {
 
     // Check if the selected order is valid -- DELETE THIS LATER
     useEffect(() => {
-        if (selectedOrder?.Items) {
-            const initialQuantities = selectedOrder.Items.reduce((acc, item) => {
-                acc[item.ProductId] = item.Quantity;
+        if (selectedOrder?.items) {
+            const initialQuantities = selectedOrder.items.reduce((acc, item) => {
+                acc[item.productId] = item.quantity;
                 return acc;
             }, {} as {[key: number]: number});
             setQuantities(initialQuantities);
@@ -48,15 +48,15 @@ const OrderUpdate = () => {
         try {
             setLoading(true);
             const updateOrderData = {
-                CustomerId: selectedOrder.CustomerId,
-                Status : selectedOrder.Status,
-                Items: selectedOrder.Items.map(item => ({
-                    ProductId: item.ProductId,
-                    Quantity: quantities[item.ProductId]
+                customerId: selectedOrder.customerId,
+                status : selectedOrder.status,
+                items: selectedOrder.items.map(item => ({
+                    productId: item.productId,
+                    quantity: quantities[item.productId]
                 }))
             } as IOrderUpdate;
 
-            await api.Orders.update(selectedOrder.Id, updateOrderData);
+            await api.Orders.update(selectedOrder.id, updateOrderData);
             alert('Rendelés sikeresen frissítve!');
             navigate('/dashboard/profile');
         } catch (error: any) { 
@@ -115,13 +115,13 @@ const OrderUpdate = () => {
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                        {selectedOrder.Items.map((item) => (
-                            <Table.Tr key={item.ProductId}>
-                                <Table.Td>{item.ProductName}</Table.Td>
+                        {selectedOrder.items.map((item) => (
+                            <Table.Tr key={item.productId}>
+                                <Table.Td>{item.productName}</Table.Td>
                                 <Table.Td>
                                     <NumberInput
-                                        value={quantities[item.ProductId]}
-                                        onChange={(value) => handleQuantityChange(item.ProductId, Number(value))}
+                                        value={quantities[item.productId]}
+                                        onChange={(value) => handleQuantityChange(item.productId, Number(value))}
                                         min={1}
                                         max={999}
                                         stepHoldDelay={500}

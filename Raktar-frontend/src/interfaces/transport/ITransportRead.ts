@@ -4,5 +4,5 @@ export interface ITransportRead {
     orderId: number;
     status: string;
     startDate?: Date;
-    endDate?: Date;  
+    endDate?: Date;
 }

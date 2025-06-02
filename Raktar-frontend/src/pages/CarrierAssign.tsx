@@ -20,7 +20,7 @@ const CarrierAssign = () => {
       setLoading(true);
       // Pending rendelések
       const ordersResp = await api.Orders.getAll();
-      const pendingOrders = (Array.isArray(ordersResp.data) ? ordersResp.data : []).filter(order => order.Status === "Pending");
+      const pendingOrders = (Array.isArray(ordersResp.data) ? ordersResp.data : []).filter(order => order.status === "At Supplier");
       setOrders(pendingOrders);
 
       // Raktárkészlet
@@ -64,14 +64,14 @@ const CarrierAssign = () => {
   // Kiadás és hozzárendelés kezelése
   const handleAssign = async (order: IOrderRead) => {
     // Ellenőrzés: minden tételhez van kiválasztott location, van carrier
-    for (const item of order.Items) {
-      const sel = selection[`${order.Id}_${item.ProductId}`];
+    for (const item of order.items) {
+      const sel = selection[`${order.id}_${item.productId}`];
       if (!sel || !sel.locationCode) {
         alert("Minden termékhez válassz tárhelyet!");
         return;
       }
     }
-    const carrierId = selection[`${order.Id}`]?.carrierId;
+    const carrierId = selection[`${order.id}`]?.carrierId;
     if (!carrierId) {
       alert("Válassz futárt!");
       return;
@@ -79,35 +79,28 @@ const CarrierAssign = () => {
 
     try {
       // 1. Storage-ból levonás
-      await Promise.all(order.Items.map(item => {
-        const sel = selection[`${order.Id}_${item.ProductId}`];
+      await Promise.all(order.items.map(item => {
+        const sel = selection[`${order.id}_${item.productId}`];
         return api.Warehouse.assign({
-          ProductId: item.ProductId,
-          Quantity: -item.Quantity, // Negatív, hogy kivonja!
-          LocationCode: LocationCode[sel.locationCode],
+          productId: item.productId,
+          quantity: -item.quantity, // Negatív, hogy kivonja!
+          locationCode: LocationCode[sel.locationCode],
         } as IWarehouseStorageCreate);
       }));
 
       // 2. Order státusz update
-      await api.Orders.update(order.Id, {
-        Status: "At Carrier",
-        CarrierId: carrierId,
-        Items: order.Items.map(item => ({
-          ProductId: item.ProductId,
-          Quantity: item.Quantity,
-        }))
-      });
+      await api.Orders.updateStatus(order.id, { status: "At Carrier" });
 
       // 3. Transport létrehozás
       await api.Transport.create({
-        orderId: order.Id,
+        orderId: order.id,
         carrierId: carrierId,
         status: "Assigned"
       } as ITransportCreate);
 
       alert("Sikeres hozzárendelés!");
       // Frissítsd a listát
-      setOrders(orders => orders.filter(o => o.Id !== order.Id));
+      setOrders(orders => orders.filter(o => o.id !== order.id));
     } catch (err) {
       alert("Hiba történt a hozzárendelés során!");
       console.error(err);
@@ -123,24 +116,24 @@ const CarrierAssign = () => {
         <div>Nincs teljesítendő rendelés.</div>
       ) : (
         orders.map(order => (
-          <div key={order.Id} style={{ marginBottom: 32 }}>
-            <Title order={4} mb="xs">Rendelés #{order.Id}</Title>
+          <div key={order.id} style={{ marginBottom: 32 }}>
+            <Title order={4} mb="xs">Rendelés #{order.id}</Title>
             <Table striped highlightOnHover withTableBorder>
               <Table.Thead>
                 <Table.Tr>
-                  <Table.Th>Termék ID</Table.Th>
+                  <Table.Th>Termék Név</Table.Th>
                   <Table.Th>Szükséges mennyiség</Table.Th>
                   <Table.Th>Tárhely</Table.Th>
                 </Table.Tr>
               </Table.Thead>
               <Table.Tbody>
-                {order.Items.map(item => {
-                  const locations = getAvailableLocations(item.ProductId, item.Quantity);
-                  const sel = selection[`${order.Id}_${item.ProductId}`] || {};
+                {order.items.map(item => {
+                  const locations = getAvailableLocations(item.productId, item.quantity);
+                  const sel = selection[`${order.id}_${item.productId}`] || {};
                   return (
-                    <Table.Tr key={item.ProductId}>
-                      <Table.Td>{item.ProductId}</Table.Td>
-                      <Table.Td>{item.Quantity}</Table.Td>
+                    <Table.Tr key={item.productId}>
+                      <Table.Td>{item.productName}</Table.Td>
+                      <Table.Td>{item.quantity}</Table.Td>
                       <Table.Td>
                         <Select
                           data={locations.map(loc => ({
@@ -148,7 +141,7 @@ const CarrierAssign = () => {
                             label: Object.keys(LocationCode).find(key => LocationCode[key as any] === (loc.locationCode as any)) || ""
                           }))}
                           value={sel.locationCode || null}
-                          onChange={value => handleSelectChange(order.Id!, item.ProductId, value)}
+                          onChange={value => handleSelectChange(order.id!, item.productId, value)}
                           placeholder="Válassz tárhelyet"
                         />
                       </Table.Td>
@@ -164,16 +157,16 @@ const CarrierAssign = () => {
                   value: carrier.id.toString(),
                   label: `${carrier.name} (ID: ${carrier.id})`
                 }))}
-                value={selection[`${order.Id}`]?.carrierId?.toString() || null}
-                onChange={value => handleCarrierChange(order.Id!, value)}
+                value={selection[`${order.id}`]?.carrierId?.toString() || null}
+                onChange={value => handleCarrierChange(order.id!, value)}
                 placeholder="Válassz futárt"
                 style={{ minWidth: 220 }}
               />
               <Button
                 onClick={() => handleAssign(order)}
                 disabled={
-                  !order.Items.every(item => selection[`${order.Id}_${item.ProductId}`]?.locationCode) ||
-                  !selection[`${order.Id}`]?.carrierId
+                  !order.items.every(item => selection[`${order.id}_${item.productId}`]?.locationCode) ||
+                  !selection[`${order.id}`]?.carrierId
                 }
               >
                 Assign

@@ -24,6 +24,7 @@ const StorageView = () => {
     .map(key => ({
       code: key,
       items: items.filter(item => (LocationCode as any)[key] === item.locationCode)
+      .filter(item => item.quantity > 0) 
     }));
 
   return (
@@ -48,7 +49,7 @@ const StorageView = () => {
                 <Table.Tbody>
                   {group.items.map(item => (
                     <Table.Tr key={item.productId}>
-                      <Table.Td>{item.productId}</Table.Td>
+                      <Table.Td>{item.productName}</Table.Td>
                       <Table.Td>{item.quantity}</Table.Td>
                     </Table.Tr>
                   ))}

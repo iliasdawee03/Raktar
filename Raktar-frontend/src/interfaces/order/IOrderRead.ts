@@ -1,11 +1,11 @@
 import { IOrderItemRead } from "./IOrderItemRead";
 
 export interface IOrderRead {
-    Id: number;
-    CustomerId: number;
-    PlacedAt: string;
-    ClosedAt? : string;
-    CarrierId? : number;
-    Status: string | null;
-    Items : IOrderItemRead[]
+    id: number;
+    customerId: number;
+    placedAt: string;
+    closedAt? : string;
+    carrierId? : number;
+    status: string | null;
+    items : IOrderItemRead[]
 }

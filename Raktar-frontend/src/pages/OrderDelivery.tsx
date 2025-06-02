@@ -84,17 +84,14 @@ const OrderDelivery = () => {
         transports
           .filter((t) => selected.includes(t.id))
           .map(async (t) => {
-            await api.Orders.update(t.orderId, {
-              Status: "Closed",
-              Items: [],
-            });
-            await api.Transport.updateStatus(t.id, "Closed", new Date());
+            await api.Orders.updateStatus(t.orderId, { status: "Delivered" });
+            await api.Transport.updateStatus(t.id, { status: "Closed", endDate: new Date().toISOString() });
           })
       );
       alert("Szállítások lezárva!");
       setTransports((prev) =>
         prev.map((t) =>
-          selected.includes(t.id) ? { ...t, status: "Closed", endDate: new Date() } : t
+          selected.includes(t.id) ? { ...t, status: "Closed", endDate: new Date()} : t
         )
       );
       setSelected([]);
@@ -104,33 +101,33 @@ const OrderDelivery = () => {
     }
 };
 
-  const handleInTransit = async () => {
-    try {
-      await Promise.all(
-        transports
-          .filter((t) => selected.includes(t.id))
-          .map(async (t) => {
+const handleInTransit = async () => {
+  try {
+    await Promise.all(
+      transports
+        .filter((t) => selected.includes(t.id)) // 1. Csak a kijelölt szállítások
+        .map(async (transport) => {
+          // 2. A 'transport.orderId' alapján frissítjük a rendelést
+          await api.Orders.updateStatus(transport.orderId, { status: "In Transit" });
+          // 3. A szállítás státuszát is frissítjük
+          await api.Transport.updateStatus(transport.id, { status: "In Transit", endDate: null });
+        })
+    );
 
-            await api.Orders.update(t.orderId, {
-              Status: "In Transit",
-              ...(userId !== null ? { CarrierId: userId } : {}),
-              Items: [], 
-            });
-            await api.Transport.updateStatus(t.id, "In Transit");
-          })
-      );
-      alert("Státusz frissítve!");
-      setTransports((prev) =>
-        prev.map((t) =>
-          selected.includes(t.id) ? { ...t, status: "In Transit" } : t
-        )
-      );
-      setSelected([]);
-    } catch (err) {
-      alert("Hiba történt a státusz frissítésekor!");
-      console.error(err);
-    }
-  };
+    alert("Státusz frissítve!");
+    setTransports((prev) =>
+      prev.map((t) =>
+        selected.includes(t.id)
+          ? { ...t, status: "In Transit", endDate: undefined }
+          : t
+      )
+    );
+    setSelected([]);
+  } catch (err : unknown) {
+    alert(`Hiba történt a státusz frissítésekor: ${err instanceof Error ? err.message : 'Ismeretlen hiba'}`);
+    console.error(err); 
+  }
+};
 
   if (isLoading) {
     return (

@@ -40,7 +40,7 @@ const WarehouseStorage = () => {
         try {
             await Promise.all(
                 Array.from(selectedFormIds).map(id =>
-                    api.DeliveryForm.update(id, { Status: "At Warehouse" })
+                    api.DeliveryForm.update(id, "At Warehouse" )
                 )
             );
             const response = await api.DeliveryForm.getAll();

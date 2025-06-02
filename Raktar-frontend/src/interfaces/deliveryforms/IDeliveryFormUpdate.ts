@@ -1,3 +1,3 @@
 export interface IDeliveryFormUpdate {
-    Status : string;
+    status : string;
 }

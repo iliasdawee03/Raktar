@@ -75,9 +75,9 @@ const ComplaintPage = () => {
         setSuccess(null);
 
         const complaintData: IComplaintCreate = {
-            OrderId: selectedOrder.id,
-            UserId: userIdFromState, 
-            Description: description,
+            orderId: selectedOrder.id,
+            userId: userIdFromState,
+            description: description,
         };
 
         try {

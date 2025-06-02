@@ -49,13 +49,13 @@ const SupplierDeliveryForm = () => {
             }
 
             const transformedProducts: IDeliveredProductCreate[] = summarizedItemsFromState.map(item => {
-                if (typeof item.productId !== 'number' || typeof item.totalQuantity !== 'number') {
+                if (typeof item.productid !== 'number' || typeof item.totalquantity !== 'number') {
                     console.warn("Skipping item due to missing or invalid productId/totalQuantity:", item);
                     return null;
                 }
                 return {
-                    productId: item.productId,
-                    quantity: item.totalQuantity,
+                    productId: item.productid,
+                    quantity: item.totalquantity,
                 };
             }).filter(item => item !== null) as IDeliveredProductCreate[];
 
@@ -140,8 +140,8 @@ const SupplierDeliveryForm = () => {
                         <Text fw={500} mb="xs">Kiválasztott termékek:</Text>
                         <ul>
                             {originalSummarizedItems.map(item => (
-                                <li key={item.productId}>
-                                    {item.productName} (ID: {item.productId}) - Mennyiség: {item.totalQuantity}
+                                <li key={item.productid}>
+                                    {item.productname} (ID: {item.productid}) - Mennyiség: {item.totalquantity}
                                 </li>
                             ))}
                         </ul>
