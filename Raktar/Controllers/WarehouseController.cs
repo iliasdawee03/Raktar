@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Raktar.Entity;
 using Raktar.Services;
 using static Raktar.Dtos.WarehouseStorageDto;
 
@@ -9,7 +10,7 @@ namespace Raktar.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "WarehouseStaff")]
+    [Authorize(Roles = "WarehouseStaff,Admin, Carrier")]
     public class WarehouseController : ControllerBase
     {
         private readonly IWarehouseService _warehouseService;
@@ -26,10 +27,10 @@ namespace Raktar.Controllers
             return Ok(storage);
         }
 
-        [HttpPost("assign")]
-        public async Task<IActionResult> AssignToStorage([FromQuery] int productId, [FromQuery] string location)
+        [HttpPost("update")]
+        public async Task<IActionResult> UpsertStorageAsync([FromBody] WarehouseStorageCreateDto dto)
         {
-            var result = await _warehouseService.AssignToStorage(productId, location);
+            var result = await _warehouseService.UpsertStorageAsync(dto);
             return result ? NoContent() : BadRequest("Failed to assign product to storage.");
         }
     }

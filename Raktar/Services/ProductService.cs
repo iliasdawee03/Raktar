@@ -9,7 +9,7 @@ namespace Raktar.Services
     {
         Task<List<ProductReadDto>> GetAllAsync();
         Task<ProductReadDto?> GetByIdAsync(int id);
-        Task<ProductReadDto> CreateAsync(ProductCreateDto dto);
+        Task<ProductCreateDto> CreateAsync(ProductCreateDto dto);
         Task<bool> UpdateAsync(int id, ProductCreateDto dto);
         Task<bool> DeleteAsync(int id);
     }
@@ -36,12 +36,12 @@ namespace Raktar.Services
             return product == null ? null : _mapper.Map<ProductReadDto>(product);
         }
 
-        public async Task<ProductReadDto> CreateAsync(ProductCreateDto dto)
+        public async Task<ProductCreateDto> CreateAsync(ProductCreateDto dto)
         {
             var product = _mapper.Map<Product>(dto);
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
-            return _mapper.Map<ProductReadDto>(product);
+            return _mapper.Map<ProductCreateDto>(product);
         }
 
         public async Task<bool> UpdateAsync(int id, ProductCreateDto dto)

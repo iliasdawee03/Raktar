@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using Raktar.Entity;
+using static Raktar.Dtos.UserDto;
 using static Raktar.Dtos.WarehouseStorageDto;
 
 namespace Raktar.Services
@@ -7,15 +10,17 @@ namespace Raktar.Services
     public interface IWarehouseService
     {
         Task<List<WarehouseStorageReadDto>> GetAllStorageAsync();
-        Task<bool> AssignToStorage(int productId, string location);
+        Task<bool> UpsertStorageAsync(WarehouseStorageCreateDto dto);
     }
     public class WarehouseService : IWarehouseService
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public WarehouseService(AppDbContext context)
+        public WarehouseService(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<List<WarehouseStorageReadDto>> GetAllStorageAsync()
@@ -34,17 +39,32 @@ namespace Raktar.Services
             }).ToList();
         }
 
-        public async Task<bool> AssignToStorage(int productId, string location)
+        public async Task<bool> UpsertStorageAsync(WarehouseStorageCreateDto dto)
         {
-            var entry = new WarehouseStorage
-            {
-                ProductId = productId,
-                LocationCode = location,
-            };
+            var productExists = await _context.Products.AnyAsync(p => p.Id == dto.ProductId);
+            if (!productExists)
+                return false;
 
-            await _context.WarehouseStorages.AddAsync(entry);
+            if (!Enum.IsDefined(typeof(LocationCode), dto.LocationCode))
+                return false;
+
+            var storage = await _context.WarehouseStorages
+                .FirstOrDefaultAsync(ws => ws.ProductId == dto.ProductId && ws.LocationCode == dto.LocationCode);
+
+            if (storage != null)
+            {
+                storage.Quantity += dto.Quantity;
+            }
+            else
+            {
+                var warehouseStorage = _mapper.Map<WarehouseStorage>(dto);
+                await _context.WarehouseStorages.AddAsync(warehouseStorage);
+            }
+
             await _context.SaveChangesAsync();
             return true;
         }
+
+
     }
 }

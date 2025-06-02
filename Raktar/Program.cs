@@ -57,7 +57,13 @@ builder.Services.AddAuthorization(options => {
     options.AddPolicy("WarehouseStaffPolicy", policy => policy.RequireRole("WarehouseStaff"));
 });
 
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
 
 
 builder.Services.AddAutoMapper(typeof(Program));
@@ -102,13 +108,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowAllOrigins");
+
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors(options => {
-    options.AllowAnyOrigin();
-    options.AllowAnyHeader();
-    options.AllowAnyMethod();
-});
 
 app.MapControllers();
 

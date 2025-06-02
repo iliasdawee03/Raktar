@@ -28,8 +28,6 @@ namespace Raktar.Dtos
             public string Password { get; set; }
 
             public int PhoneNumber { get; set; }
-            [Required]
-            public UserRole Role { get; set; }
         }
 
         public class UserLoginDto
