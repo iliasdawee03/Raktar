@@ -37,7 +37,7 @@ const RegisterPage = () => {
         validate: {
             username: (value) => (value.trim().length < 3 ? 'A felhasználónév legalább 3 karakter hosszú legyen.' : null),
             email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Érvénytelen email cím.'),
-            password: (value) => (value.length < 6 ? 'A jelszó legalább 6 karakter hosszú legyen.' : null),
+            password: (value) => (value.length < 1 ? 'A jelszó megadása kötelező.' : null),
             phoneNumber: (value) => {
                 if (value === null || value === undefined) {
                     return 'A telefonszám megadása kötelező.'; 
