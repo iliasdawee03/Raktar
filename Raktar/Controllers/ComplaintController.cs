@@ -22,7 +22,7 @@ namespace Raktar.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ComplaintReadDto>>> GetAll()
+        public async Task<ActionResult<List<ComplaintReadDto>>> GetAll()
         {
             var complaints = await _complaintService.GetAllAsync();
             return Ok(complaints);

@@ -52,14 +52,14 @@ namespace Raktar.Services
             return _mapper.Map<TransportCreateDto>(transport);
         }
 
-        public async Task<bool> UpdateStatusAsync(int id, string newStatus, DateTime? endDate)
+        public async Task<bool> UpdateStatusAsync(int id, string status, DateTime? endDate)
         {
             var transport = await _context.Transports.FindAsync(id);
             if (transport == null)
                 return false;
 
             transport.EndDate = endDate;
-            transport.Status = newStatus;
+            transport.Status = status;
             await _context.SaveChangesAsync();
             return true;
         }

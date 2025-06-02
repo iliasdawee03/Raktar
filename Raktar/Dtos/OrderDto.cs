@@ -28,5 +28,9 @@ namespace Raktar.Dtos
             public List<OrderItemCreateDto> Items { get; set; }
         }
 
+        public class OrderStatusUpdateDto
+        {
+            public string Status { get; set; }
+        }
     }
 }
