@@ -89,7 +89,7 @@ const CarrierAssign = () => {
       }));
 
       // 2. Order státusz update
-      await api.Orders.updateStatus(order.id, "At Carrier");
+      await api.Orders.updateStatus(order.id, { status: "At Carrier" });
 
       // 3. Transport létrehozás
       await api.Transport.create({
