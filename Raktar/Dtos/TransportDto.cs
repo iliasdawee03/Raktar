@@ -18,5 +18,9 @@
             public int OrderId { get; set; }
             public string Status { get; set; }
         }
+        public class TransportUpdateDto { 
+            public string Status { get; set; }
+            public DateTime? EndDate { get; set; }
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace Raktar.Services
         Task<OrderCreateDto> CreateOrderAsync(OrderCreateDto dto);
         Task<bool> UpdateOrderAsync(int id, OrderUpdateDto dto);
         Task<bool> DeleteOrderAsync(int id);
+        Task<bool> UpdateStatusAsync(int id, string status);
     }
 
     public class OrderService : IOrderService
@@ -85,6 +86,18 @@ namespace Raktar.Services
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<bool> UpdateStatusAsync(int id, string status)
+        {
+            var update = await _context.Orders.FirstOrDefaultAsync(o => o.Id == id);
+            if (update == null)
+                return false;
+            
+            update.Status = status;
+            await _context.SaveChangesAsync();
+            return true;
+
         }
     }
 }

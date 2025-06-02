@@ -51,5 +51,12 @@ namespace Raktar.Controllers
             var result = await _orderService.DeleteOrderAsync(id);
             return result ? NoContent() : NotFound();
         }
+
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody]OrderStatusUpdateDto dto)
+        {
+            var result = await _orderService.UpdateStatusAsync(id, dto.Status);
+            return result ? NoContent() : NotFound();
+        }
     }
 }
