@@ -12,7 +12,6 @@ const WarehouseStorage = () => {
     const [deliveryForms, setDeliveryForms] = useState<IDeliveryFormRead[]>([]);
     const [isLoading, setLoading] = useState(true);
     const [selectedFormIds, setSelectedFormIds] = useState<Set<number>>(new Set());
-    // locationCodeMap: { [productId: number]: LocationCode }
     const [locationCodeMap, setLocationCodeMap] = useState<Record<number, keyof typeof LocationCode>>({});
 
     useEffect(() => {
@@ -48,8 +47,7 @@ const WarehouseStorage = () => {
         }));
     };
 
-    const handleCreateWarehouseStorage = async () => {
-        // Összegyűjtjük a kijelölt formok összes termékét
+    const handleCreateWarehouseStorage = async () => {  
         const selectedForms = deliveryForms.filter(form => selectedFormIds.has(form.id!));
         const warehouseItems: IWarehouseStorageCreate[] = [];
         selectedForms.forEach(form => {
@@ -72,6 +70,11 @@ const WarehouseStorage = () => {
             await Promise.all(
                 warehouseItems.map(item =>
                     api.Warehouse.assign(item)
+                )
+            );
+            await Promise.all(
+                selectedForms.map(form =>
+                    api.DeliveryForm.update(form.id!,"In Storage")
                 )
             );
             alert("Sikeres raktározás!");

@@ -27,7 +27,7 @@ const SupplierOrders = () => {
             const response = await api.Orders.getAll();
             console.log ("Fetched Orders:", response.data);
             const fetchedOrders: IOrderRead[] = Array.isArray(response.data) ? response.data : [];
-            const pendingOrders = fetchedOrders.filter(order => order.status === "Pending" || order.status === "Open");
+            const pendingOrders = fetchedOrders.filter(order => order.status === "Open");
             setOrders(pendingOrders);
 
             const itemsFromAllOrders: IOrderItemRead[] = pendingOrders.reduce((acc, currentOrder) => {
@@ -78,11 +78,10 @@ const SupplierOrders = () => {
         alert("Nincs szállítható termék.");
         return;
     }
-
     try {
         await Promise.all(
             orders.map(order =>
-                api.Orders.update(order.id, { ...order, status: "At supplier" })
+                api.Orders.updateStatus(order.id, { status: "At Supplier" }) // Assuming the API accepts this structure
             )
         );
         navigate("/dashboard/supplierdeliveryform", {

@@ -14,7 +14,6 @@ import { IProductRead } from "../interfaces/product/IProductRead";
 import { IProductCreate } from "../interfaces/product/IProductCreate";
 import { IOrderUpdate } from "../interfaces/order/IOrderUpdate";
 import { IWarehouseStorageRead} from "../interfaces/warehouse/IWarehouseStorageRead";
-import { IDeliveryFormUpdate } from "../interfaces/deliveryforms/IDeliveryFormUpdate";
 import { IWarehouseStorageCreate } from "../interfaces/warehouse/IWarehouseStorageCreate";
 
 
@@ -39,7 +38,7 @@ const DeliveryForm = {
     getAll: () => axiosInstance.get<IDeliveryFormRead[]>('/api/DeliveryForms'),
     getById: (id: number) => axiosInstance.get<IDeliveryFormRead>(`/api/DeliveryForms/${id}`),
     create : (deliveryForm: IDeliveryFormCreate) => axiosInstance.post<IDeliveryFormCreate>('/api/DeliveryForms', deliveryForm),
-    update : (id : number , deliveryFormUpdate : IDeliveryFormUpdate) => axiosInstance.put<IDeliveryFormUpdate>(`/api/DeliveryForms/${id}`, deliveryFormUpdate),
+    update : (id : number , status : string) => axiosInstance.put<void>(`/api/DeliveryForms/${id}/status`, { status }),
 };
 
 const Products = {
@@ -76,15 +75,24 @@ const Orders = {
     create : (order: IOrderCreate) => axiosInstance.post<IOrderCreate>('/api/Orders', order),
     update : (id: number, order: IOrderUpdate) => axiosInstance.post<IOrderUpdate>(`/api/Orders/${id}`, order),
     delete : (id: number) => axiosInstance.delete<boolean>(`/api/Orders/${id}`),
+    updateStatus:(id : number , payload: { status: string }) => 
+    axiosInstance.put<void>(
+      `/api/Orders/${id}/status`, 
+      payload
+    ),
 };
 
+export interface TransportUpdateDto {
+  status: string;
+  endDate: string | null;
+}
 // Transport API (Placeholder, as no specific functions were provided)
 const Transport = {
     getAll: () => axiosInstance.get<ITransportRead[]>('/api/Transports'),
     getById: (id : number) => axiosInstance.get<ITransportRead>(`/api/Transports/${id}`),
     create: (transport : ITransportCreate) => axiosInstance.post<ITransportCreate>('/api/Transports', transport),
-    updateStatus: (id: number, status: string, endDate?: Date) => 
-        axiosInstance.put<any>(`/api/Transports/${id}/status`, { newStatus: status, endDate: endDate }),
+    updateStatus: (id: number, payload : TransportUpdateDto) => 
+            axiosInstance.put<void>(`/api/Transports/${id}/status`, payload),
 };
 
 //Exporting all API functions

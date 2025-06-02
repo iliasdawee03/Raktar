@@ -44,7 +44,7 @@ const Profile = () => {
     const updateValidation = (order : IOrderRead) => {
         const currentDate = new Date();
         const closedDate = new Date(String(order.closedAt));
-        if(closedDate && closedDate > currentDate)
+        if(closedDate && closedDate > currentDate && order.status ==  "Open" || order.status == "Pending")
         {
             navigate('/dashboard/orderupdate', {
                 state: { selectedOrder: order }

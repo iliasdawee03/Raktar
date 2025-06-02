@@ -92,6 +92,7 @@ const Product = () => {
         selectedOrderItems.forEach((value) => { 
             if (value.quantity > 0) {
                 orderItemsToPass.push({
+                 // Ezt a mezőt eltávolíthatod, ha nem szükséges
                     productId: value.product.id,
                     quantity: value.quantity,
                 });

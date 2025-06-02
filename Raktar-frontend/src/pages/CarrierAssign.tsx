@@ -20,7 +20,7 @@ const CarrierAssign = () => {
       setLoading(true);
       // Pending rendelések
       const ordersResp = await api.Orders.getAll();
-      const pendingOrders = (Array.isArray(ordersResp.data) ? ordersResp.data : []).filter(order => order.status === "Pending");
+      const pendingOrders = (Array.isArray(ordersResp.data) ? ordersResp.data : []).filter(order => order.status === "At Supplier");
       setOrders(pendingOrders);
 
       // Raktárkészlet
@@ -89,14 +89,7 @@ const CarrierAssign = () => {
       }));
 
       // 2. Order státusz update
-      await api.Orders.update(order.id, {
-        status: "At Carrier",
-        carrierId: carrierId,
-        items: order.items.map(item => ({
-          productId: item.productId,
-          quantity: item.quantity,
-        }))
-      });
+      await api.Orders.updateStatus(order.id, "At Carrier");
 
       // 3. Transport létrehozás
       await api.Transport.create({
@@ -128,7 +121,7 @@ const CarrierAssign = () => {
             <Table striped highlightOnHover withTableBorder>
               <Table.Thead>
                 <Table.Tr>
-                  <Table.Th>Termék ID</Table.Th>
+                  <Table.Th>Termék Név</Table.Th>
                   <Table.Th>Szükséges mennyiség</Table.Th>
                   <Table.Th>Tárhely</Table.Th>
                 </Table.Tr>
@@ -139,7 +132,7 @@ const CarrierAssign = () => {
                   const sel = selection[`${order.id}_${item.productId}`] || {};
                   return (
                     <Table.Tr key={item.productId}>
-                      <Table.Td>{item.productId}</Table.Td>
+                      <Table.Td>{item.productName}</Table.Td>
                       <Table.Td>{item.quantity}</Table.Td>
                       <Table.Td>
                         <Select
